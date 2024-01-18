@@ -1,4 +1,10 @@
-import type { Biography, Nationality, Role, Subject, Term } from '@/types';
+import type {
+  UlanBiography,
+  UlanNationality,
+  UlanRole,
+  UlanSubject,
+  UlanTerm,
+} from '@/types';
 
 import updateFromFile from '../util/updateFromFile';
 import { processFileLineByLine, writeJsonLFile } from './fileUtils';
@@ -36,12 +42,12 @@ async function loadRoleValues(filePath: string): Promise<Map<string, string>> {
 
 export async function loadSubjectsMap(
   filePath: string
-): Promise<Map<string, Subject>> {
-  const subjectsMap = new Map<string, Subject>();
+): Promise<Map<string, UlanSubject>> {
+  const subjectsMap = new Map<string, UlanSubject>();
 
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
-    const term: Term = {
+    const term: UlanTerm = {
       aacr2Flag: fields[0],
       displayDate: fields[1],
       displayName: fields[2],
@@ -59,7 +65,7 @@ export async function loadSubjectsMap(
 
     const subject = subjectsMap.get(term.subjectId);
     if (!subject) {
-      const subject: Subject = {
+      const subject: UlanSubject = {
         subjectId: term.subjectId,
         terms: [term],
       };
@@ -77,11 +83,11 @@ export async function loadSubjectsMap(
 
 async function addBiographyToSubjects(
   biographyFilePath: string,
-  subjectsMap: Map<string, Subject>
+  subjectsMap: Map<string, UlanSubject>
 ) {
   await processFileLineByLine(biographyFilePath, async (line) => {
     const fields = line.split('\t'); // Adjust based on actual file format
-    const biography: Biography = {
+    const biography: UlanBiography = {
       bioId: fields[0],
       biographyText: fields[1],
       birthDate: parseInt(fields[2]),
@@ -108,12 +114,12 @@ async function addBiographyToSubjects(
 
 async function addNationalityToSubjects(
   nationalityFilePath: string,
-  subjectsMap: Map<string, Subject>,
+  subjectsMap: Map<string, UlanSubject>,
   lookupMap: Map<string, string>
 ) {
   await processFileLineByLine(nationalityFilePath, async (line) => {
     const fields = line.split('\t'); // Adjust based on actual file format
-    const nationality: Nationality = {
+    const nationality: UlanNationality = {
       displayOrder: parseInt(fields[0]),
       nationalId: fields[1],
       nationalityCode: fields[2],
@@ -140,12 +146,12 @@ async function addNationalityToSubjects(
 
 export function addRoleToSubjects(
   roleFilePath: string,
-  subjectsMap: Map<string, Subject>,
+  subjectsMap: Map<string, UlanSubject>,
   roleMap: Map<string, string>
 ) {
   return processFileLineByLine(roleFilePath, async (line) => {
     const fields = line.split('\t'); // Adjust based on actual file format
-    const role: Role = {
+    const role: UlanRole = {
       displayDate: fields[0],
       displayOrder: parseInt(fields[1]),
       endDate: parseInt(fields[2]),
@@ -171,7 +177,7 @@ export function addRoleToSubjects(
   });
 }
 
-export function sortSubjectProperties(subjectsMap: Map<string, Subject>) {
+export function sortSubjectProperties(subjectsMap: Map<string, UlanSubject>) {
   for (const subject of subjectsMap.values()) {
     subject.terms?.sort((a, b) => a.displayOrder - b.displayOrder);
     // sort biographies so that preferred biography ("P") is first:

@@ -28,3 +28,7 @@ Once running, elasticsearch & kibana should be up and running at:
 
 1. Elasticsearch: http://0.0.0.0:9200/
 2. Kibana: http://0.0.0.0:5601/app/home#/
+
+## TODO
+
+Consider using nested object fields for related terms, biographies, and nationalities.

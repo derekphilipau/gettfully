@@ -1,15 +1,10 @@
-import { getClient } from '../client';
-import * as T from '@elastic/elasticsearch/lib/api/types';
 import type { ApiSearchResponse } from '@/types';
-import { getEnvVar } from '@/lib/utils';
+import * as T from '@elastic/elasticsearch/lib/api/types';
 
-const INDEX_NAME = getEnvVar('SEARCH_ELASTIC_INDEX_NAME');
-const OPTIONS_PAGE_SIZE = 20; // 20 results per aggregation options search
+import { getClient } from '../client';
 
-interface OptionsParams {
-  field: string; // Field to get options for
-  query?: string | null; // Query string
-}
+const INDEX_NAME = 'ulan-subjects';
+const OPTIONS_PAGE_SIZE = 40; // results per aggregation options search
 
 /**
  * Get options/buckets for a specific field/agg
@@ -18,11 +13,10 @@ interface OptionsParams {
  * @returns
  */
 export async function options(
-  params: OptionsParams,
-  size = OPTIONS_PAGE_SIZE,
+  field: string, // Field to get options for
+  query?: string | null, // Query string
+  size = OPTIONS_PAGE_SIZE
 ): Promise<ApiSearchResponse> {
-  const { field, query } = params;
-
   if (!field) {
     throw new Error('Field parameter is required');
   }

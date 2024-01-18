@@ -29,7 +29,7 @@
   "search.onView": "On View",
   "search.openAccess": "Open Access",
   "search.imageUnavailable": "Image Unavailable",
-  "search.noResults": "Sorry, we couldn’t find any results matching your criteria.",
+  "search.noResults": "No results found.",
   "search.didYouMean": "Did you mean:",
   "search.isNow": "On view",
   "search.isShowTimeline": "Show timeline",

@@ -8,6 +8,8 @@ export async function GET(request: Request) {
 
   const sanitizedParams = {
     query: searchParams.get('query') || '',
+    gender: searchParams.get('gender') || '',
+    nationality: searchParams.get('nationality') || '',
   };
 
   try {

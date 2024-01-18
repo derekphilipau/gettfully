@@ -4,18 +4,18 @@ import { format, formatISO } from 'date-fns';
 const aggFields = [];
 const SEARCH_AGG_SIZE = 100;
 
-export function getFunctionScoreBoolQuery(
+export function getMultiMatchBoolQuery(
   query: string
 ): T.QueryDslQueryContainer {
   return {
     bool: {
       must: [
         {
-          multi_match: {
-            query,
-            type: 'cross_fields',
-            operator: 'and',
-            fields: ['terms.termEntry.search'],
+          fuzzy: {
+            'terms.termEntry.suggest': {
+              value: query,
+              fuzziness: 'AUTO',
+            },
           },
         },
       ],
@@ -85,35 +85,25 @@ export function addQueryBoolFilterTerm(
 }
 
 /**
- * For the default date range query, we only want documents (events) that
- * have already started OR have no start date.
- * @param esQuery
- * @param searchParams
+ * Add a term to a bool filter query
+ *
+ * @param esQuery   The ES query
+ * @param name    The name of the field to filter on
+ * @param value   The value to filter on
+ * @returns  Void.  The ES Query is modified in place
  */
-export function addQueryBoolLanguage(
+export function addQueryBoolFilterWildcardTerm(
   esQuery: any,
-  language: string | undefined
-) {
-  if (!language) return;
+  name: string,
+  value: string | boolean | number | undefined
+): void {
+  if (!value) return;
   addQueryBoolFilter(esQuery, {
-    bool: {
-      should: [
-        {
-          term: {
-            language,
-          },
-        },
-        {
-          bool: {
-            must_not: {
-              exists: {
-                field: 'language',
-              },
-            },
-          },
-        },
-      ],
-      minimum_should_match: 1,
+    wildcard: {
+      [name]: {
+        value: `*${value}*`,
+        case_insensitive: true,
+      },
     },
   });
 }

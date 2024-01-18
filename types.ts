@@ -14,7 +14,7 @@ import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
  * Description: The biography table contains the biographical information of subject
  * records.
  */
-export interface Biography {
+export interface UlanBiography {
   bioId: string; // number (30) Unique identification number for biographical entry
   biographyText: string; // varchar2 (1000) Textual description of biographical entry
   birthDate: number; // number (15) Date of birth
@@ -32,21 +32,21 @@ export interface Biography {
  * Description: The nationality table contains the nationality information of subject
  * records.
  */
-export interface Nationality {
+export interface UlanNationality {
   displayOrder: number; // number (4) Number where the nationality ranks in the subject record
   nationalId: string; // number (30) Unique ID number of nationality record
-  nationalityCode: string; // varchar (100) Nationality code
+  nationalityCode: string; // varchar (100) UlanNationality code
   name?: string; // Name from lookup table
   preferred: string; // varchar2 (15) Flag indicating whether or not a nationality is preferred for a certain subject
   subjectId: string; // number (30) ID of related subject record
 }
 
 /**
- * Table: Role
+ * Table: UlanRole
  * The place type/role relationship table contains links between the subject record
  * and role information
  */
-export interface Role {
+export interface UlanRole {
   name?: string; // Name of place type/role
   displayDate: string; // varchar2(200) - Label for relationship date information
   displayOrder: number; // number(10) - Order number of place type/role
@@ -66,7 +66,7 @@ export interface Role {
  * must have one and only one preferred term.
  *
  */
-export interface Term {
+export interface UlanTerm {
   aacr2Flag: string; // varchar2 (10) Flag to indicate when a ULAN record is a AACR2 record, Y – Yes, NA – N/A
   displayDate: string; // varchar2 (200) Label for term date information
   displayName: string; // varchar2 (15) Flag indicating whether or not the term is a display name (not used in AAT), NA – N/A
@@ -77,23 +77,23 @@ export interface Term {
   preferred: string; // char (1) Flag indicating whether or not the term is the preferred form for its subject record
   startDate: number; // number (15) Historical start date of term use
   subjectId: string; // number (30) ID of related subject record
-  termEntry: string; // varchar2 (1000) Term entry
+  termEntry: string; // varchar2 (1000) UlanTerm entry
   termId: string; // number (30) Number identifying a unique term record
   vernacular: string; // char (1) Flag indicating whether or not the term is the vernacular for a certain place
 }
 
-export interface Subject {
+export interface UlanSubject {
   legacyId?: string; // varchar2(30) - ID of subject record in prior system
   mergedStat?: 'M' | 'N'; // varchar2(15) - Merge status (M - Merged, N - Not merged)
-  parentKey?: string; // number(30) - Subject ID of preferred parent
-  recordType?: 'P' | 'C'; // varchar2(15) - Subject record type (P - Person, C - Corporate body)
+  parentKey?: string; // number(30) - UlanSubject ID of preferred parent
+  recordType?: 'P' | 'C'; // varchar2(15) - UlanSubject record type (P - Person, C - Corporate body)
   sortOrder?: number; // number(10) - Sort order of subject record among preferred parent siblings
   specialProj?: string; // varchar2(25) - Name of special project associated with subject record
   subjectId?: string; // number(30) - Unique identification number of an AAT record
-  terms?: Term[];
-  biographies?: Biography[];
-  nationalities?: Nationality[];
-  roles?: Role[];
+  terms?: UlanTerm[];
+  biographies?: UlanBiography[];
+  nationalities?: UlanNationality[];
+  roles?: UlanRole[];
 }
 
 /*
@@ -192,26 +192,8 @@ export interface AggOptions {
 export type SortOrder = 'asc' | 'desc';
 
 export interface ApiSearchParams {
-  pageNumber?: number;
-  size?: number;
-  sortField?: string;
-  sortOrder?: SortOrder;
   query?: string;
-  type?: string;
-  classification?: string;
-  'constituents.name'?: string;
-  tags?: string;
-  categories?: string;
-  startDate?: Date;
-  endDate?: Date;
-  startYear?: number;
-  endYear?: number;
-  visible?: boolean;
-  publicAccess?: boolean;
-  hasImage?: boolean;
-  language?: string;
-  rawSource?: boolean;
-  isNow?: boolean;
+  gender?: string;
   [key: string]: any;
 }
 

@@ -6,6 +6,7 @@ import type {
   ElasticsearchDocument,
 } from '@/types';
 import * as T from '@elastic/elasticsearch/lib/api/types';
+import { add } from 'date-fns';
 
 import { getEnvVar } from '@/lib/utils';
 import { getClient } from '../client';
@@ -15,10 +16,11 @@ import {
   addQueryBoolDateRange,
   addQueryBoolFilterExists,
   addQueryBoolFilterTerm,
+  addQueryBoolFilterWildcardTerm,
   addQueryBoolLanguage,
   addQueryBoolYearRange,
-  getFunctionScoreBoolQuery,
   getMatchAllBoolQuery,
+  getMultiMatchBoolQuery,
 } from './searchQueryBuilder';
 
 export const aggFields = [];
@@ -35,7 +37,7 @@ export async function search(
   searchParams: ApiSearchParams
 ): Promise<ApiSearchResponse> {
   let boolQuery: T.QueryDslQueryContainer = searchParams.query
-    ? getFunctionScoreBoolQuery(searchParams.query)
+    ? getMultiMatchBoolQuery(searchParams.query)
     : //  getMatchAllBoolQuery()
       getMatchAllBoolQuery();
 
@@ -46,6 +48,17 @@ export async function search(
     size: 24,
     track_total_hits: true,
   };
+
+  if (searchParams.gender) {
+    addQueryBoolFilterTerm(esQuery, 'biographies.sex', searchParams.gender);
+  }
+  if (searchParams.nationality) {
+    addQueryBoolFilterWildcardTerm(
+      esQuery,
+      'nationalities.name',
+      searchParams.nationality
+    );
+  }
 
   /*
   // Add search filters:
@@ -119,6 +132,7 @@ export async function search(
     };
   }
   */
+  console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);

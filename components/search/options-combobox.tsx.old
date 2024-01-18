@@ -1,0 +1,123 @@
+'use client';
+
+import { useState } from 'react';
+import type { AggOption } from '@/types';
+import { Check, ChevronsUpDown } from 'lucide-react';
+
+import { useDebounce } from '@/lib/debounce';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
+const frameworks = [
+  {
+    value: 'next.js',
+    label: 'Next.js',
+  },
+  {
+    value: 'sveltekit',
+    label: 'SvelteKit',
+  },
+  {
+    value: 'nuxt.js',
+    label: 'Nuxt.js',
+  },
+  {
+    value: 'remix',
+    label: 'Remix',
+  },
+  {
+    value: 'astro',
+    label: 'Astro',
+  },
+];
+
+interface OptionsComboboxProps {
+  field: string;
+}
+
+export function OptionsCombobox({ field }): OptionsComboboxProps {
+  const [searchOptions, setSearchOptions] = useState<AggOption[]>([]);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
+
+  const debouncedSuggest = useDebounce(() => {
+    if (value?.length < 3) {
+      setSearchOptions([]);
+      setOpen(false);
+      return;
+    }
+    if (value)
+      fetch(`/api/search/options?field=${field}&query=${value}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.data?.length > 0) {
+            setSearchOptions(data.data);
+            setOpen(true);
+          } else {
+            setSearchOptions([]);
+            setOpen(false);
+          }
+        });
+  }, 50);
+
+  const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    debouncedSuggest();
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[200px] justify-between"
+        >
+          {value
+            ? searchOptions.find((aggOption) => aggOption.key === value)?.key
+            : 'Select framework...'}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[200px] p-0">
+        <Command>
+          <CommandInput placeholder="Search..." onChange={onQueryChange} />
+          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandGroup>
+            {searchOptions.map((aggOption) => (
+              <CommandItem
+                key={aggOption.key}
+                value={aggOption.key}
+                onSelect={(currentValue) => {
+                  setValue(currentValue === value ? '' : currentValue);
+                  setOpen(false);
+                }}
+              >
+                <Check
+                  className={cn(
+                    'mr-2 h-4 w-4',
+                    value === aggOption.key ? 'opacity-100' : 'opacity-0'
+                  )}
+                />
+                {aggOption.key}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
