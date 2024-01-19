@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronsUpDownIcon } from 'lucide-react';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,

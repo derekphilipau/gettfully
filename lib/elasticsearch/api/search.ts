@@ -3,7 +3,7 @@ import type {
   ApiSearchParams,
   ApiSearchResponse,
   ApiSearchResponseMetadata,
-  ElasticsearchDocument,
+  UlanSubject,
 } from '@/types';
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { add } from 'date-fns';
@@ -64,6 +64,20 @@ export async function search(
       esQuery,
       searchParams.startYear,
       searchParams.endYear
+    );
+  }
+  if (searchParams.birthPlace) {
+    addQueryBoolFilterWildcardTerm(
+      esQuery,
+      'biographies.birthPlaceName',
+      searchParams.birthPlace
+    );
+  }
+  if (searchParams.deathPlace) {
+    addQueryBoolFilterWildcardTerm(
+      esQuery,
+      'biographies.deathPlaceName',
+      searchParams.deathPlace
     );
   }
 
@@ -139,15 +153,13 @@ export async function search(
     };
   }
   */
-  console.log(JSON.stringify(esQuery, null, 2));
+  //  console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const metadata = getResponseMetadata(response, 24, 0);
   const options = getResponseAggOptions(response);
-  const data = response.hits.hits.map(
-    (hit) => hit._source
-  ) as ElasticsearchDocument[];
+  const data = response.hits.hits.map((hit) => hit._source) as UlanSubject[];
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };
   return res;
 }

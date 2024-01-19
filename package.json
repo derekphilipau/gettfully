@@ -11,7 +11,8 @@
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",
-    "format": "prettier --check --ignore-path .gitignore ."
+    "format": "prettier --check --ignore-path .gitignore .",
+    "load:ulan": "npx ts-node ./lib/commands/importUlanCommand.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.388.0",

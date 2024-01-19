@@ -11,6 +11,8 @@ export async function GET(request: Request) {
     query: searchParams.get('query') || '',
     gender: searchParams.get('gender') || '',
     nationality: searchParams.get('nationality') || '',
+    birthPlace: searchParams.get('birthPlace') || '',
+    deathPlace: searchParams.get('deathPlace') || '',
   };
   const startYear = parseInt(searchParams.get('startYear') || '');
   const endYear = parseInt(searchParams.get('endYear') || '');

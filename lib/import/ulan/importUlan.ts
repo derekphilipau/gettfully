@@ -27,19 +27,14 @@ async function loadLookupValues(
   return lookupMap;
 }
 
-type UlanPlace = {
-  name: string;
-  type: string;
-};
-async function loadPlaces(filePath: string): Promise<Map<string, UlanPlace>> {
-  const lookupMap = new Map<string, UlanPlace>();
+async function loadPlaces(filePath: string): Promise<Map<string, string>> {
+  const lookupMap = new Map<string, string>();
 
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
     const name = fields[0];
-    const type = fields[1];
-    const id = fields[2];
-    lookupMap.set(id, { name, type });
+    const id = fields[1];
+    lookupMap.set(id, name);
   });
 
   return lookupMap;
@@ -47,7 +42,7 @@ async function loadPlaces(filePath: string): Promise<Map<string, UlanPlace>> {
 
 async function loadRoleValues(filePath: string): Promise<Map<string, string>> {
   const lookupMap = new Map<string, string>();
-  // biochemist	41152
+
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
     const id = fields[1];
@@ -101,7 +96,8 @@ export async function loadSubjectsMap(
 
 async function addBiographyToSubjects(
   biographyFilePath: string,
-  subjectsMap: Map<string, UlanSubject>
+  subjectsMap: Map<string, UlanSubject>,
+  placesMap: Map<string, string>
 ) {
   await processFileLineByLine(biographyFilePath, async (line) => {
     const fields = line.split('\t'); // Adjust based on actual file format
@@ -117,6 +113,19 @@ async function addBiographyToSubjects(
       sex: fields[8],
       subjectId: fields[9],
     };
+
+    if (biography.birthPlaceId) {
+      const place = placesMap.get(biography.birthPlaceId);
+      if (place) {
+        biography.birthPlaceName = place;
+      }
+    }
+    if (biography.deathPlaceId) {
+      const place = placesMap.get(biography.deathPlaceId);
+      if (place) {
+        biography.deathPlaceName = place;
+      }
+    }
 
     if (subjectsMap.has(biography.subjectId)) {
       const subject = subjectsMap.get(biography.subjectId);
@@ -235,7 +244,11 @@ export async function importUlan() {
   const subjectsMap = await loadSubjectsMap(`${dataDir}/TERM.out`);
 
   console.log('loading biographies and nationalities...');
-  await addBiographyToSubjects(`${dataDir}/BIOGRAPHY.out`, subjectsMap);
+  await addBiographyToSubjects(
+    `${dataDir}/BIOGRAPHY.out`,
+    subjectsMap,
+    placesMap
+  );
   await addNationalityToSubjects(
     `${dataDir}/NATIONALITY.out`,
     subjectsMap,

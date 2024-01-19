@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
-import { SearchAsYouTypeOptionsInput } from './search-as-you-type-options-input';
 
 type Props = {};
 
@@ -23,6 +22,8 @@ export function SearchContainer({}: Props) {
   const [nationality, setNationality] = useState<string>('');
   const [startYear, setStartYear] = useState<string>('');
   const [endYear, setEndYear] = useState<string>('');
+  const [birthPlace, setBirthPlace] = useState<string>('');
+  const [deathPlace, setDeathPlace] = useState<string>('');
   const dict = getDictionary();
   let errorMessage = dict['search.noResults'];
 
@@ -48,12 +49,18 @@ export function SearchContainer({}: Props) {
     if (endYear) {
       params.append('endYear', endYear);
     }
+    if (birthPlace) {
+      params.append('birthPlace', birthPlace);
+    }
+    if (deathPlace) {
+      params.append('deathPlace', deathPlace);
+    }
     const currentUrl = `/api/search?${params.toString()}`;
-    console.log('xxx', currentUrl);
+    console.log('currentUrl', currentUrl);
+
     fetch(currentUrl)
       .then((res) => res.json())
       .then((data) => {
-        console.log('data', data);
         setItems(data.data);
         setIsLoading(false);
       })
@@ -63,7 +70,15 @@ export function SearchContainer({}: Props) {
         setItems([]);
         setIsLoading(false);
       });
-  }, [searchQuery, gender, nationality, startYear, endYear]);
+  }, [
+    searchQuery,
+    gender,
+    nationality,
+    startYear,
+    endYear,
+    birthPlace,
+    deathPlace,
+  ]);
 
   return (
     <section className="container pt-2">
@@ -95,6 +110,16 @@ export function SearchContainer({}: Props) {
             title="Nationality"
             field="nationalities.name"
             onChange={setNationality}
+          />
+          <OptionsCombobox
+            title="Birthplace"
+            field="biographies.birthPlaceName"
+            onChange={setBirthPlace}
+          />
+          <OptionsCombobox
+            title="Deathplace"
+            field="biographies.deathPlaceName"
+            onChange={setDeathPlace}
           />
           <div className="flex items-center gap-x-4">
             <div className="">
