@@ -4,8 +4,8 @@ import { Key, useEffect, useState } from 'react';
 import { getDictionary } from '@/dictionaries/dictionaries';
 import type { AatSubject, GettySubject, UlanSubject } from '@/types';
 
+import { DebouncedInput } from '@/components/debounced-input';
 import { GettySubjectCard } from '@/components/search/getty-subject-card';
-import { DebouncedInput } from '@/components/searchold/debounced-input';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';

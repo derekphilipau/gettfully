@@ -37,19 +37,19 @@ export function ThemeToggle() {
         </DropdownMenuLabel>
         {theme !== 'light' && (
           <DropdownMenuItem onClick={() => setTheme('light')}>
-            <SunIcon className="mr-2 h-4 w-4" />
+            <SunIcon className="mr-2 size-4" />
             <span>{dict['nav.theme.light']}</span>
           </DropdownMenuItem>
         )}
         {theme !== 'dark' && (
           <DropdownMenuItem onClick={() => setTheme('dark')}>
-            <MoonIcon className="mr-2 h-4 w-4" />
+            <MoonIcon className="mr-2 size-4" />
             <span>{dict['nav.theme.dark']}</span>
           </DropdownMenuItem>
         )}
         {theme !== 'system' && (
           <DropdownMenuItem onClick={() => setTheme('system')}>
-            <LaptopIcon className="mr-2 h-4 w-4" />
+            <LaptopIcon className="mr-2 size-4" />
             <span>{dict['nav.theme.system']}</span>
           </DropdownMenuItem>
         )}

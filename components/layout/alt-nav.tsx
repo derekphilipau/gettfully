@@ -17,7 +17,7 @@ export function AltNav() {
               className: 'text-neutral-700 dark:text-neutral-400',
             })}
           >
-            <GithubIcon className="h-5 w-5" />
+            <GithubIcon className="size-5" />
             <span className="sr-only">Github</span>
           </div>
         </Link>
@@ -35,7 +35,7 @@ export function AltNav() {
               className: 'text-neutral-700 dark:text-neutral-400',
             })}
           >
-            <InstagramIcon className="h-5 w-5" />
+            <InstagramIcon className="size-5" />
             <span className="sr-only">Instagram</span>
           </div>
         </Link>

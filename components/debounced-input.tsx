@@ -47,7 +47,7 @@ export function DebouncedInput({
           {isLoading && (
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
               <Loader2Icon
-                className="h-6 w-6 animate-spin text-muted-foreground"
+                className="size-6 animate-spin text-muted-foreground"
                 aria-hidden="true"
               />
             </div>

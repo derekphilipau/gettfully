@@ -115,7 +115,7 @@ function SearchResults({
             <div className="flex items-center">
               <Check
                 className={cn(
-                  'mr-2 h-4 w-4',
+                  'mr-2 size-4',
                   selectedResult === key ? 'opacity-100' : 'opacity-0'
                 )}
               />

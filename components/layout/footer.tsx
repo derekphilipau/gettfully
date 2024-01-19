@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import { getDictionary } from '@/dictionaries/dictionaries';
-import type { NavItem } from '@/typesold/nav';
 
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 
 interface FooterProps {
-  items?: NavItem[];
+  items?: any[];
 }
 
 export function Footer({ items }: FooterProps) {

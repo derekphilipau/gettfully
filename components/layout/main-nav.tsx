@@ -4,13 +4,12 @@ import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { getDictionary } from '@/dictionaries/dictionaries';
-import type { NavItem } from '@/typesold/nav';
 
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 
 interface MainNavProps {
-  items?: NavItem[];
+  items?: any[];
 }
 
 export function MainNav({ items }: MainNavProps) {

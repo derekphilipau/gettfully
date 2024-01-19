@@ -53,7 +53,7 @@ export function OptionsCombobox({
           <div className="flex gap-x-1">
             {selected && (
               <XIcon
-                className="ml-1 h-4 w-4 shrink-0"
+                className="ml-1 size-4 shrink-0"
                 onClick={(event) => {
                   event.stopPropagation();
                   setSelected(undefined);
@@ -61,7 +61,7 @@ export function OptionsCombobox({
                 }}
               />
             )}
-            <ChevronsUpDownIcon className="ml-1 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDownIcon className="ml-1 size-4 shrink-0 opacity-50" />
           </div>
         </Button>
       </PopoverTrigger>
