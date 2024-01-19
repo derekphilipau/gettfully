@@ -2,6 +2,7 @@ import type {
   UlanBiography,
   UlanNationality,
   UlanRole,
+  UlanScopeNote,
   UlanSubject,
   UlanTerm,
 } from '@/types';
@@ -28,29 +29,29 @@ async function loadLookupValues(
 }
 
 async function loadPlaces(filePath: string): Promise<Map<string, string>> {
-  const lookupMap = new Map<string, string>();
+  const placesMap = new Map<string, string>();
 
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
     const name = fields[0];
     const id = fields[1];
-    lookupMap.set(id, name);
+    placesMap.set(id, name);
   });
 
-  return lookupMap;
+  return placesMap;
 }
 
 async function loadRoleValues(filePath: string): Promise<Map<string, string>> {
-  const lookupMap = new Map<string, string>();
+  const roleMap = new Map<string, string>();
 
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
     const id = fields[1];
     const value = fields[0];
-    lookupMap.set(id, value);
+    roleMap.set(id, value);
   });
 
-  return lookupMap;
+  return roleMap;
 }
 
 export async function loadSubjectsMap(
@@ -206,26 +207,30 @@ export function addRoleToSubjects(
 
 export function addScopeNotesToSubjects(
   scopeNotesFilePath: string,
-  subjectsMap: Map<string, UlanSubject>
+  subjectsMap: Map<string, UlanSubject>,
+  lookupMap: Map<string, string>
 ) {
   return processFileLineByLine(scopeNotesFilePath, async (line) => {
     const fields = line.split('\t'); // Adjust based on actual file format
-    const scopeNoteId = fields[0];
-    const subjectId = fields[1];
-    const languageCode = fields[2];
-    const noteText = fields[3];
+    const scopeNote: UlanScopeNote = {
+      scopeNoteId: fields[0],
+      subjectId: fields[1],
+      languageCode: fields[2],
+      noteText: fields[3],
+    };
+    if (scopeNote.languageCode) {
+      const language = lookupMap.get(scopeNote.languageCode);
+      if (language) {
+        scopeNote.languageName = language;
+      }
+    }
 
-    const subject = subjectsMap.get(subjectId);
+    const subject = subjectsMap.get(scopeNote.subjectId);
     if (subject) {
       if (!subject.scopeNotes) {
         subject.scopeNotes = [];
       }
-      subject.scopeNotes.push({
-        scopeNoteId,
-        subjectId,
-        languageCode,
-        noteText,
-      });
+      subject.scopeNotes.push(scopeNote);
     }
   });
 }
@@ -285,7 +290,11 @@ export async function importUlan() {
     subjectsMap,
     roleMap
   );
-  await addScopeNotesToSubjects(`${dataDir}/SCOPE_NOTES.out`, subjectsMap);
+  await addScopeNotesToSubjects(
+    `${dataDir}/SCOPE_NOTES.out`,
+    subjectsMap,
+    lookupMap
+  );
 
   console.log('sorting subject properties...');
   sortSubjectProperties(subjectsMap);

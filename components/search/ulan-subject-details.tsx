@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { BiographyGenderBadge } from './badges/biography-gender-badge';
 import { ContributorBadge } from './badges/contributor-badge';
+import { LanguageBadge } from './badges/language-badge';
 import { PreferredBadge } from './badges/preferred-badge';
 import { TermHistoricFlagBadge } from './badges/term-historic-flag-badge';
 import { TermVernacularBadge } from './badges/term-vernacular-badge';
@@ -22,6 +23,7 @@ export function UlanSubjectDetails({ ulanSubject }: { ulanSubject: any }) {
                 className="flex flex-wrap items-center gap-x-1"
               >
                 {scopeNote.noteText}
+                <LanguageBadge item={scopeNote} />
               </li>
             ))}
           </ul>

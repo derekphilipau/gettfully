@@ -68,6 +68,7 @@ export interface UlanScopeNote {
   scopeNoteId: string; // number (30) Unique ID for a scope note record
   subjectId: string; // number (30) ID of subject record related to contributor
   languageCode: string; // varchar2 (15) Numeric code indicating the language of the descriptive note
+  languageName?: string; // Name of language (lookup)
   noteText: string; // varchar2 (4000) The descriptive note text
 }
 

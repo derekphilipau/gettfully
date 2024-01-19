@@ -49,6 +49,7 @@ export const scopeNoteObjectField: T.MappingProperty = {
     scopeNoteId: S.keywordField,
     subjectId: S.keywordField,
     languageCode: S.keywordField,
+    languageName: S.keywordField,
     noteText: S.textField,
   },
 };
