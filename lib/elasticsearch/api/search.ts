@@ -59,6 +59,13 @@ export async function search(
       searchParams.nationality
     );
   }
+  if (searchParams.startYear || searchParams.endYear) {
+    addQueryBoolYearRange(
+      esQuery,
+      searchParams.startYear,
+      searchParams.endYear
+    );
+  }
 
   /*
   // Add search filters:

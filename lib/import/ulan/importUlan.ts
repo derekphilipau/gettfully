@@ -27,6 +27,24 @@ async function loadLookupValues(
   return lookupMap;
 }
 
+type UlanPlace = {
+  name: string;
+  type: string;
+};
+async function loadPlaces(filePath: string): Promise<Map<string, UlanPlace>> {
+  const lookupMap = new Map<string, UlanPlace>();
+
+  await processFileLineByLine(filePath, async (line) => {
+    const fields = line.split('\t');
+    const name = fields[0];
+    const type = fields[1];
+    const id = fields[2];
+    lookupMap.set(id, { name, type });
+  });
+
+  return lookupMap;
+}
+
 async function loadRoleValues(filePath: string): Promise<Map<string, string>> {
   const lookupMap = new Map<string, string>();
   // biochemist	41152
@@ -204,6 +222,10 @@ export async function importUlan() {
   console.log('loading lookup values...');
   const lookupFilePath = `${dataDir}/LOOKUP_VALUES.out`;
   const lookupMap = await loadLookupValues(lookupFilePath);
+
+  console.log('loading places...');
+  const placesFilePath = `${dataDir}/PLACE.out`;
+  const placesMap = await loadPlaces(placesFilePath);
 
   console.log('loading role values...');
   const roleFilePath = `${dataDir}/PTYPE_ROLE.out`;

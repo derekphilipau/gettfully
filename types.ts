@@ -194,6 +194,9 @@ export type SortOrder = 'asc' | 'desc';
 export interface ApiSearchParams {
   query?: string;
   gender?: string;
+  nationality?: string;
+  startYear?: number;
+  endYear?: number;
   [key: string]: any;
 }
 

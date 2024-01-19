@@ -198,7 +198,7 @@ export function addQueryBoolYearRange(
   ) {
     addQueryBoolFilter(esQuery, {
       range: {
-        startYear: {
+        'biographies.birthDate': {
           gte: startYear,
           lte: endYear,
         },
@@ -206,7 +206,7 @@ export function addQueryBoolYearRange(
     });
     addQueryBoolFilter(esQuery, {
       range: {
-        endYear: {
+        'biographies.deathDate': {
           gte: startYear,
           lte: endYear,
         },
@@ -215,7 +215,7 @@ export function addQueryBoolYearRange(
   } else if (startYear !== undefined) {
     addQueryBoolFilter(esQuery, {
       range: {
-        startYear: {
+        'biographies.birthDate': {
           gte: startYear,
         },
       },
@@ -223,7 +223,7 @@ export function addQueryBoolYearRange(
   } else if (endYear !== undefined) {
     addQueryBoolFilter(esQuery, {
       range: {
-        endYear: {
+        'biographies.deathDate': {
           lte: endYear,
         },
       },

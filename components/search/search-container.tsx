@@ -6,6 +6,7 @@ import { set } from 'date-fns';
 
 import { UlanSubjectCard } from '@/components/search/ulan-subject-card';
 import { DebouncedInput } from '@/components/searchold/debounced-input';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
@@ -20,6 +21,8 @@ export function SearchContainer({}: Props) {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [nationality, setNationality] = useState<string>('');
+  const [startYear, setStartYear] = useState<string>('');
+  const [endYear, setEndYear] = useState<string>('');
   const dict = getDictionary();
   let errorMessage = dict['search.noResults'];
 
@@ -39,6 +42,12 @@ export function SearchContainer({}: Props) {
     if (nationality) {
       params.append('nationality', nationality);
     }
+    if (startYear) {
+      params.append('startYear', startYear);
+    }
+    if (endYear) {
+      params.append('endYear', endYear);
+    }
     const currentUrl = `/api/search?${params.toString()}`;
     console.log('xxx', currentUrl);
     fetch(currentUrl)
@@ -54,7 +63,7 @@ export function SearchContainer({}: Props) {
         setItems([]);
         setIsLoading(false);
       });
-  }, [searchQuery, gender, nationality]);
+  }, [searchQuery, gender, nationality, startYear, endYear]);
 
   return (
     <section className="container pt-2">
@@ -87,6 +96,24 @@ export function SearchContainer({}: Props) {
             field="nationalities.name"
             onChange={setNationality}
           />
+          <div className="flex items-center gap-x-4">
+            <div className="">
+              <Input
+                id="startYear"
+                placeholder="Born After"
+                value={startYear}
+                onChange={(e) => setStartYear(e.target.value)}
+              />
+            </div>
+            <div className="">
+              <Input
+                id="endYear"
+                placeholder="Died Before"
+                value={endYear}
+                onChange={(e) => setEndYear(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="mt-4 flex flex-col flex-wrap gap-2">

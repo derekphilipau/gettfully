@@ -4,7 +4,7 @@ import * as T from '@elastic/elasticsearch/lib/api/types';
 import { getClient } from '../client';
 
 const INDEX_NAME = 'ulan-subjects';
-const OPTIONS_PAGE_SIZE = 40; // results per aggregation options search
+export const OPTIONS_PAGE_SIZE = 40; // results per aggregation options search
 
 /**
  * Get options/buckets for a specific field/agg
