@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LinkIcon } from 'lucide-react';
+import { ExternalLinkIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { CopyButton } from '@/components/copy-button';
@@ -26,16 +26,6 @@ export function UlanSubjectHeader({ ulanSubject }: { ulanSubject: any }) {
     <div className="flex w-full flex-col items-start">
       <div className="flex flex-wrap items-start gap-x-2">
         <div className="flex items-start gap-x-1 text-lg font-semibold sm:text-xl">
-          <Link
-            className={cn(
-              buttonVariants({ size: 'icon', variant: 'ghost' }),
-              'h-auto w-auto p-2'
-            )}
-            href={`http://vocab.getty.edu/page/ulan/${ulanSubject.subjectId}`}
-          >
-            <LinkIcon className="h-5 w-5" />
-            <span className="sr-only">Getty Link</span>
-          </Link>
           <div>
             <h2 className="flex flex-wrap items-center gap-x-2">
               {ulanSubject.terms?.[0]?.termEntry}
@@ -43,6 +33,17 @@ export function UlanSubjectHeader({ ulanSubject }: { ulanSubject: any }) {
                 {ulanSubject.subjectId}
                 <CopyButton className="" value={ulanSubject.subjectId} />
               </Badge>
+              <Link
+                className={cn(
+                  buttonVariants({ size: 'sm', variant: 'link' }),
+                  'h-9 rounded-md px-1'
+                )}
+                href={`http://vocab.getty.edu/page/ulan/${ulanSubject.subjectId}`}
+              >
+                Getty
+                <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                <span className="sr-only">Getty Link</span>
+              </Link>
             </h2>
             {preferredBiography && (
               <div className="text-sm text-muted-foreground sm:text-base">
