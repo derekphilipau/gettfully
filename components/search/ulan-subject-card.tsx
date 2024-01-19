@@ -22,9 +22,9 @@ export function UlanSubjectCard({ ulanSubject }: { ulanSubject: any }) {
       >
         <div className="flex items-start justify-between gap-x-2">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="icon" className="">
-              <ChevronsUpDownIcon className="h-5 w-5" />
-              <span className="sr-only">Toggle</span>
+            <Button variant="ghost" size="icon" className="h-12 w-12">
+              <ChevronsUpDownIcon className="h-6 w-6" />
+              <span className="sr-only">Expand Subject</span>
             </Button>
           </CollapsibleTrigger>
           <UlanSubjectHeader ulanSubject={ulanSubject} />

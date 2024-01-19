@@ -145,7 +145,9 @@ export function SearchContainer({}: Props) {
         {items?.length > 0 &&
           items.map(
             (item: any, i: Key) =>
-              item && <UlanSubjectCard key={i} ulanSubject={item} />
+              item && (
+                <UlanSubjectCard key={item.subjectId} ulanSubject={item} />
+              )
           )}
         {!(items?.length > 0) && (
           <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
