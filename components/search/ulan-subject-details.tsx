@@ -10,8 +10,25 @@ import { TermVernacularBadge } from './badges/term-vernacular-badge';
 export function UlanSubjectDetails({ ulanSubject }: { ulanSubject: any }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+      {ulanSubject.scopeNotes?.length > 0 && (
+        <div className="w-full">
+          <h5 className="mb-1 text-sm font-semibold uppercase text-muted-foreground">
+            Scope Notes
+          </h5>
+          <ul className="text-sm">
+            {ulanSubject.scopeNotes?.map((scopeNote: any) => (
+              <li
+                key={scopeNote.scopeNoteId}
+                className="flex flex-wrap items-center gap-x-1"
+              >
+                {scopeNote.noteText}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {ulanSubject.terms?.length > 1 && (
-        <div>
+        <div className="max-w-xs">
           <h5 className="mb-1 text-sm font-semibold uppercase text-muted-foreground">
             Terms
           </h5>
@@ -34,7 +51,7 @@ export function UlanSubjectDetails({ ulanSubject }: { ulanSubject: any }) {
         </div>
       )}
       {ulanSubject.nationalities?.length > 0 && (
-        <div>
+        <div className="max-w-xs">
           <h5 className="mb-1 text-sm font-semibold uppercase text-muted-foreground">
             Nationalities
           </h5>
@@ -54,7 +71,7 @@ export function UlanSubjectDetails({ ulanSubject }: { ulanSubject: any }) {
         </div>
       )}
       {ulanSubject.roles?.length > 0 && (
-        <div>
+        <div className="max-w-xs">
           <h5 className="mb-1 text-sm font-semibold uppercase text-muted-foreground">
             Roles
           </h5>
@@ -74,7 +91,7 @@ export function UlanSubjectDetails({ ulanSubject }: { ulanSubject: any }) {
         </div>
       )}
       {ulanSubject.biographies?.length > 0 && (
-        <div>
+        <div className="max-w-xl">
           <h5 className="mb-1 text-sm font-semibold uppercase text-muted-foreground">
             Biographies
           </h5>

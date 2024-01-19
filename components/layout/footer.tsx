@@ -25,13 +25,6 @@ export function Footer({ items }: FooterProps) {
           {}
           <p className="text-xs">{dict['footer.text']}</p>
         </div>
-        <div className="mt-6 md:mt-0">
-          <h5 className="mb-2 text-lg">{dict['footer.marketing.text']}</h5>
-          <Input
-            name="marketing"
-            placeholder={dict['footer.marketing.placeholder']}
-          />
-        </div>
       </div>
       {items?.length ? (
         <nav

@@ -204,6 +204,32 @@ export function addRoleToSubjects(
   });
 }
 
+export function addScopeNotesToSubjects(
+  scopeNotesFilePath: string,
+  subjectsMap: Map<string, UlanSubject>
+) {
+  return processFileLineByLine(scopeNotesFilePath, async (line) => {
+    const fields = line.split('\t'); // Adjust based on actual file format
+    const scopeNoteId = fields[0];
+    const subjectId = fields[1];
+    const languageCode = fields[2];
+    const noteText = fields[3];
+
+    const subject = subjectsMap.get(subjectId);
+    if (subject) {
+      if (!subject.scopeNotes) {
+        subject.scopeNotes = [];
+      }
+      subject.scopeNotes.push({
+        scopeNoteId,
+        subjectId,
+        languageCode,
+        noteText,
+      });
+    }
+  });
+}
+
 export function sortSubjectProperties(subjectsMap: Map<string, UlanSubject>) {
   for (const subject of subjectsMap.values()) {
     subject.terms?.sort((a, b) => a.displayOrder - b.displayOrder);
@@ -259,6 +285,7 @@ export async function importUlan() {
     subjectsMap,
     roleMap
   );
+  await addScopeNotesToSubjects(`${dataDir}/SCOPE_NOTES.out`, subjectsMap);
 
   console.log('sorting subject properties...');
   sortSubjectProperties(subjectsMap);

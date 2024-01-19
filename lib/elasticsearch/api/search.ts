@@ -26,6 +26,7 @@ import {
 export const aggFields = [];
 
 const INDEX_NAME = 'ulan-subjects';
+const PAGE_SIZE = 48;
 
 /**
  * Search for documents in one or more indices
@@ -45,7 +46,7 @@ export async function search(
     index: INDEX_NAME,
     query: boolQuery,
     from: 0,
-    size: 24,
+    size: PAGE_SIZE,
     track_total_hits: true,
   };
 
@@ -157,7 +158,7 @@ export async function search(
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);
-  const metadata = getResponseMetadata(response, 24, 0);
+  const metadata = getResponseMetadata(response, PAGE_SIZE, 0);
   const options = getResponseAggOptions(response);
   const data = response.hits.hits.map((hit) => hit._source) as UlanSubject[];
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };

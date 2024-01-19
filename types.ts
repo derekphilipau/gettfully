@@ -61,6 +61,17 @@ export interface UlanRole {
 }
 
 /**
+ * Table: SCOPE_NOTES
+ * Descriptive notes linked to a subject record associated with a particular language
+ */
+export interface UlanScopeNote {
+  scopeNoteId: string; // number (30) Unique ID for a scope note record
+  subjectId: string; // number (30) ID of subject record related to contributor
+  languageCode: string; // varchar2 (15) Numeric code indicating the language of the descriptive note
+  noteText: string; // varchar2 (4000) The descriptive note text
+}
+
+/**
  * Table: TERM
  * Description: The term table contains the various vocabulary entries (‘names’ in ULAN)
  * for each subject record. One term for each subject must be declared 'preferred' (column
@@ -96,6 +107,7 @@ export interface UlanSubject {
   biographies?: UlanBiography[];
   nationalities?: UlanNationality[];
   roles?: UlanRole[];
+  scopeNotes?: UlanScopeNote[];
 }
 
 export interface AggOption {

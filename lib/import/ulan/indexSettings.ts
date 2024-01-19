@@ -44,6 +44,15 @@ export const roleObjectField: T.MappingProperty = {
   },
 };
 
+export const scopeNoteObjectField: T.MappingProperty = {
+  properties: {
+    scopeNoteId: S.keywordField,
+    subjectId: S.keywordField,
+    languageCode: S.keywordField,
+    noteText: S.textField,
+  },
+};
+
 const termObjectField: T.MappingProperty = {
   properties: {
     aacr2Flag: S.keywordField,
@@ -76,6 +85,7 @@ const ulanSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
   biographies: biographyObjectField,
   nationalities: nationalityObjectField,
   roles: roleObjectField,
+  scopeNotes: scopeNoteObjectField,
 };
 
 export const indexSettings: T.IndicesIndexSettings = {
