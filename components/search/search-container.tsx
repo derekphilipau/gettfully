@@ -61,7 +61,6 @@ export function SearchContainer({ index }: Props) {
       params.append('deathPlace', deathPlace);
     }
     const currentUrl = `/api/search?${params.toString()}`;
-    console.log('currentUrl', currentUrl);
 
     fetch(currentUrl)
       .then((res) => res.json())

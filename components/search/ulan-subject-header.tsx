@@ -33,8 +33,6 @@ export function UlanSubjectHeader({
 
   const vocabulary = ulanSubject?.type;
 
-  console.log('ulanSubject', ulanSubject);
-
   if (!ulanSubject?.terms || !(ulanSubject.terms?.length > 0)) return null;
 
   return (

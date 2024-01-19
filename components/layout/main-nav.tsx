@@ -8,11 +8,9 @@ import { getDictionary } from '@/dictionaries/dictionaries';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/logo';
 
-interface MainNavProps {
-  items?: any[];
-}
+interface MainNavProps {}
 
-export function MainNav({ items }: MainNavProps) {
+export function MainNav({}: MainNavProps) {
   const pathname = usePathname();
   const basePath = pathname?.split('/')[1];
   const dict = getDictionary();
@@ -29,14 +27,16 @@ export function MainNav({ items }: MainNavProps) {
           className="inline-flex items-center space-x-2 text-xl font-bold"
         >
           <Logo className="h-10 fill-black object-contain dark:fill-white md:mr-2" />
-          <span className="">{dict['site.title']}</span>
+          <span className="inline-block">
+            gett<span className="text-muted-foreground">full</span>y
+          </span>
         </Link>
         <Link
           href="/ulan"
           className={cn(
             'flex items-center text-lg font-semibold transition-colors',
             basePath === 'ulan'
-              ? 'text-foreground hover:text-foreground/80'
+              ? 'font-bold text-foreground hover:text-foreground/80'
               : 'text-foreground/60 hover:text-foreground/80'
           )}
         >
@@ -47,7 +47,7 @@ export function MainNav({ items }: MainNavProps) {
           className={cn(
             'flex items-center text-lg font-semibold transition-colors',
             basePath === 'aat'
-              ? 'text-foreground hover:text-foreground/80'
+              ? 'font-bold text-foreground hover:text-foreground/80'
               : 'text-foreground/60 hover:text-foreground/80'
           )}
         >

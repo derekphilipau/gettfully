@@ -157,7 +157,7 @@ export async function search(
     };
   }
   */
-  console.log(JSON.stringify(esQuery, null, 2));
+  // console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);
