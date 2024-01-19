@@ -87,7 +87,7 @@ export function SearchContainer({}: Props) {
           onSearchAsYouTypeChange={onSearch}
           isLoading={isLoading}
         />
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-2 flex flex-wrap gap-2">
           <RadioGroup
             defaultValue={gender}
             onValueChange={setGender}

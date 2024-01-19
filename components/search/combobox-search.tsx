@@ -13,12 +13,18 @@ import {
 } from '@/components/ui/command';
 
 interface SearchProps {
+  title: string;
   field: string;
   selectedResult?: string;
   onSelectResult: (option: string) => void;
 }
 
-export function Search({ field, selectedResult, onSelectResult }: SearchProps) {
+export function ComboboxSearch({
+  title,
+  field,
+  selectedResult,
+  onSelectResult,
+}: SearchProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSelectResult = (option: string) => {
@@ -36,7 +42,7 @@ export function Search({ field, selectedResult, onSelectResult }: SearchProps) {
       <CommandInput
         value={searchQuery}
         onValueChange={setSearchQuery}
-        placeholder="Search for aggOption"
+        placeholder={`Search ${title}`}
       />
 
       <SearchResults

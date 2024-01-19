@@ -10,10 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Search } from './search';
+import { ComboboxSearch } from './combobox-search';
 
 const POPOVER_WIDTH = 'w-full sm:w-[220px]';
-const BUTTON_LABEL_MAX_LENGTH = 18;
 
 export function OptionsCombobox({
   title,
@@ -38,10 +37,7 @@ export function OptionsCombobox({
 
   let displayName = title;
   if (selected) {
-    displayName =
-      selected.length > BUTTON_LABEL_MAX_LENGTH + 2
-        ? `${selected.substring(0, BUTTON_LABEL_MAX_LENGTH)}...`
-        : selected;
+    displayName = selected;
   }
 
   return (
@@ -52,7 +48,7 @@ export function OptionsCombobox({
           role="combobox"
           className={cn('justify-between', POPOVER_WIDTH)}
         >
-          {displayName}
+          <div className=" overflow-hidden text-ellipsis">{displayName}</div>
 
           <div className="flex gap-x-1">
             {selected && (
@@ -71,7 +67,8 @@ export function OptionsCombobox({
       </PopoverTrigger>
 
       <PopoverContent side="bottom" className={cn('p-0', POPOVER_WIDTH)}>
-        <Search
+        <ComboboxSearch
+          title={title}
           field={field}
           selectedResult={selected}
           onSelectResult={handleSetActive}
