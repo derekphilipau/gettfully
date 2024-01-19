@@ -91,7 +91,7 @@ export function SearchContainer({}: Props) {
           <RadioGroup
             defaultValue={gender}
             onValueChange={setGender}
-            className="flex flex-wrap items-center"
+            className="flex h-8 flex-wrap items-center sm:h-auto"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="" id="r1" />
@@ -121,23 +121,23 @@ export function SearchContainer({}: Props) {
             field="biographies.deathPlaceName"
             onChange={setDeathPlace}
           />
-          <div className="flex items-center gap-x-4">
-            <div className="">
-              <Input
-                id="startYear"
-                placeholder="Born After"
-                value={startYear}
-                onChange={(e) => setStartYear(e.target.value)}
-              />
-            </div>
-            <div className="">
-              <Input
-                id="endYear"
-                placeholder="Died Before"
-                value={endYear}
-                onChange={(e) => setEndYear(e.target.value)}
-              />
-            </div>
+          <div className="">
+            <Input
+              id="startYear"
+              placeholder="Born After"
+              className="w-28"
+              value={startYear}
+              onChange={(e) => setStartYear(e.target.value)}
+            />
+          </div>
+          <div className="">
+            <Input
+              id="endYear"
+              placeholder="Died Before"
+              className="w-28"
+              value={endYear}
+              onChange={(e) => setEndYear(e.target.value)}
+            />
           </div>
         </div>
       </div>

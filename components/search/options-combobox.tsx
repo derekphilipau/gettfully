@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDownIcon, XIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/popover';
 import { Search } from './search';
 
-const POPOVER_WIDTH = 'w-[200px]';
+const POPOVER_WIDTH = 'w-full sm:w-[220px]';
+const BUTTON_LABEL_MAX_LENGTH = 18;
 
 export function OptionsCombobox({
   title,
@@ -30,13 +31,18 @@ export function OptionsCombobox({
     (value: string) => {
       setSelected(value);
       onChange(value);
-      // OPTIONAL: close the combobox upon selection
       setOpen(false);
     },
     [onChange]
   );
 
-  const displayName = selected ? selected : title;
+  let displayName = title;
+  if (selected) {
+    displayName =
+      selected.length > BUTTON_LABEL_MAX_LENGTH + 2
+        ? `${selected.substring(0, BUTTON_LABEL_MAX_LENGTH)}...`
+        : selected;
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -48,7 +54,19 @@ export function OptionsCombobox({
         >
           {displayName}
 
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <div className="flex gap-x-1">
+            {selected && (
+              <XIcon
+                className="ml-1 h-4 w-4 shrink-0"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSelected(undefined);
+                  onChange('');
+                }}
+              />
+            )}
+            <ChevronsUpDownIcon className="ml-1 h-4 w-4 shrink-0 opacity-50" />
+          </div>
         </Button>
       </PopoverTrigger>
 

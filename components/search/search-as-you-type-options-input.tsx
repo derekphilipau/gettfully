@@ -52,7 +52,6 @@ export function SearchAsYouTypeOptionsInput({
   }, 50);
 
   function selectValue(value: string) {
-    console.log('selectValue', value);
     onSearchAsYouTypeChange(value);
     setValue(value);
     setOpen(false);
