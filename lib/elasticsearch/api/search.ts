@@ -6,7 +6,6 @@ import type {
   UlanSubject,
 } from '@/types';
 import * as T from '@elastic/elasticsearch/lib/api/types';
-import { add } from 'date-fns';
 
 import { getEnvVar } from '@/lib/utils';
 import { getClient } from '../client';
@@ -17,7 +16,6 @@ import {
   addQueryBoolFilterExists,
   addQueryBoolFilterTerm,
   addQueryBoolFilterWildcardTerm,
-  addQueryBoolLanguage,
   addQueryBoolYearRange,
   getMatchAllBoolQuery,
   getMultiMatchBoolQuery,
@@ -25,7 +23,7 @@ import {
 
 export const aggFields = [];
 
-const INDEX_NAME = 'ulan-subjects';
+const DEFAULT_INDICES = ['ulan-subjects', 'aat-subjects'];
 const PAGE_SIZE = 48;
 
 /**
@@ -37,13 +35,18 @@ const PAGE_SIZE = 48;
 export async function search(
   searchParams: ApiSearchParams
 ): Promise<ApiSearchResponse> {
+  let index: string | string[] = DEFAULT_INDICES;
+  if (searchParams.index) {
+    index = searchParams.index === 'ulan' ? 'ulan-subjects' : 'aat-subjects';
+  }
+
   let boolQuery: T.QueryDslQueryContainer = searchParams.query
     ? getMultiMatchBoolQuery(searchParams.query)
     : //  getMatchAllBoolQuery()
       getMatchAllBoolQuery();
 
   const esQuery: T.SearchRequest = {
-    index: INDEX_NAME,
+    index,
     query: boolQuery,
     from: 0,
     size: PAGE_SIZE,
@@ -154,7 +157,7 @@ export async function search(
     };
   }
   */
-  //  console.log(JSON.stringify(esQuery, null, 2));
+  console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);

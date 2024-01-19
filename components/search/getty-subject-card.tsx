@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { AatSubject, UlanSubject } from '@/types';
 import { ChevronsUpDownIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -7,10 +8,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { UlanSubjectDetails } from './ulan-subject-details';
+import { GettySubjectDetails } from './getty-subject-details';
 import { UlanSubjectHeader } from './ulan-subject-header';
 
-export function UlanSubjectCard({ ulanSubject }: { ulanSubject: any }) {
+export function GettySubjectCard({
+  gettySubject,
+}: {
+  gettySubject: UlanSubject | AatSubject;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,15 +27,15 @@ export function UlanSubjectCard({ ulanSubject }: { ulanSubject: any }) {
       >
         <div className="flex items-start justify-between gap-x-2">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-12 w-12">
-              <ChevronsUpDownIcon className="h-6 w-6" />
+            <Button variant="ghost" size="icon" className="size-12">
+              <ChevronsUpDownIcon className="size-6" />
               <span className="sr-only">Expand Subject</span>
             </Button>
           </CollapsibleTrigger>
-          <UlanSubjectHeader ulanSubject={ulanSubject} />
+          <UlanSubjectHeader ulanSubject={gettySubject} />
         </div>
         <CollapsibleContent className="border-t pt-3">
-          <UlanSubjectDetails ulanSubject={ulanSubject} />
+          <GettySubjectDetails gettySubject={gettySubject} />
         </CollapsibleContent>
       </Collapsible>
     </div>

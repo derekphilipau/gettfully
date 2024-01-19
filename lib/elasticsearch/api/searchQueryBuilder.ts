@@ -12,7 +12,7 @@ export function getMultiMatchBoolQuery(
       must: [
         {
           fuzzy: {
-            'terms.termEntry.suggest': {
+            'terms.term.suggest': {
               value: query,
               fuzziness: 'AUTO',
             },

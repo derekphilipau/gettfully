@@ -66,7 +66,7 @@ const termObjectField: T.MappingProperty = {
     preferred: S.keywordField,
     startDate: S.keywordField,
     subjectId: S.keywordField,
-    termEntry: S.suggestUnaggregatedStandardAnalyzerField,
+    term: S.suggestUnaggregatedStandardAnalyzerField,
     termId: S.keywordField,
     vernacular: S.keywordField,
   },

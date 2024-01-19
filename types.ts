@@ -1,8 +1,6 @@
-/*
-TODO
-*/
-
 import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+
+export type GettyVocabulary = 'aat' | 'ulan';
 
 /**
  * See ULAN REL data dictionary:
@@ -48,13 +46,15 @@ export interface UlanNationality {
  * The place type/role relationship table contains links between the subject record
  * and role information
  */
+export type UlanRoleHistoricFlag = 'C' | 'H' | 'B' | 'NA' | 'U';
+export type UlanRolePreferred = 'P' | 'N';
 export interface UlanRole {
   name?: string; // Name of place type/role
   displayDate: string; // varchar2(200) - Label for relationship date information
   displayOrder: number; // number(10) - Order number of place type/role
   endDate: number | null; // number(15) - Historical end date of place type/role relationship
-  historicFlag: 'C' | 'H' | 'B' | 'NA' | 'U'; // varchar2(10) - Flag indicating the historical status of the place type/role relationship
-  preferred: 'P' | 'N'; // char(1) - Flag indicating whether or not the place type/role is preferred for a particular subject
+  historicFlag: UlanRoleHistoricFlag; // varchar2(10) - Flag indicating the historical status of the place type/role relationship
+  preferred: UlanRolePreferred; // char(1) - Flag indicating whether or not the place type/role is preferred for a particular subject
   ptypeRoleId: string; // number(30) - ID number of place type/role
   startDate: number | null; // number(15) - Historical start date of place type/role relationship
   subjectId: string; // number(30) - ID number of subject record
@@ -74,37 +74,63 @@ export interface UlanScopeNote {
 
 /**
  * Table: TERM
- * Description: The term table contains the various vocabulary entries (‘names’ in ULAN)
+ * Description: The term table contains the various vocabulary entries (‘names’ in ULAN, 'terms' in AAT)
  * for each subject record. One term for each subject must be declared 'preferred' (column
  * 'preferred' = 'P') to form the subject record's overall title or label. Each subject record
  * must have one and only one preferred term.
- *
  */
-export interface UlanTerm {
-  aacr2Flag: string; // varchar2 (10) Flag to indicate when a ULAN record is a AACR2 record, Y – Yes, NA – N/A
+
+export type GettyTermHistoricFlag = 'B' | 'C' | 'H' | 'NA' | 'U';
+export type GettyTermPreferred = 'P' | 'V';
+export type GettyTermVernacular = 'V' | 'O' | 'U';
+export interface GettyTerm {
+  aacr2Flag: string; // varchar2 (10) Flag to indicate when a record is a AACR2 record, Y – Yes, NA – N/A
   displayDate: string; // varchar2 (200) Label for term date information
   displayName: string; // varchar2 (15) Flag indicating whether or not the term is a display name (not used in AAT), NA – N/A
   displayOrder: number; // number (10) Order number of the term in relation to the other terms of a subject record
   endDate: number; // number (15) Historical end date of term use
-  historicFlag: string; // char (1) Flag indicating the historical status of the term B – Both, C – Current, H – Historical, NA – N/A, U – Undetermined
+  historicFlag: GettyTermHistoricFlag; // char (1) Flag indicating the historical status of the term B – Both, C – Current, H – Historical, NA – N/A, U – Undetermined
   otherFlags: string; // varchar2 (15) Extra field for holding any flags not already represented in the term table (not used in ULAN)
-  preferred: string; // char (1) Flag indicating whether or not the term is the preferred form for its subject record
+  preferred: GettyTermPreferred; // char (1) Flag indicating whether or not the term is the preferred form for its subject record
   startDate: number; // number (15) Historical start date of term use
   subjectId: string; // number (30) ID of related subject record
-  termEntry: string; // varchar2 (1000) UlanTerm entry
+  term: string; // varchar2 (1000) Term entry
   termId: string; // number (30) Number identifying a unique term record
-  vernacular: string; // char (1) Flag indicating whether or not the term is the vernacular for a certain place
+  vernacular: GettyTermVernacular; // char (1) Flag indicating whether or not the term is the vernacular for a certain place
 }
 
-export interface UlanSubject {
+export interface AatScopeNote {
+  scopeNoteId: string; // number(30) - Unique ID for a scope note record
+  subjectId: string; // number(30) - ID of subject record related to scope note
+  languageCode: string; // varchar2(15) - Numeric code indicating the language of the descriptive note
+  noteText: string; // varchar2(4000) - The descriptive note text
+}
+
+export type GettySubjectMergedStatType = 'M' | 'N';
+
+export interface GettySubject {
+  type: GettyVocabulary;
   legacyId?: string; // varchar2(30) - ID of subject record in prior system
-  mergedStat?: 'M' | 'N'; // varchar2(15) - Merge status (M - Merged, N - Not merged)
-  parentKey?: string; // number(30) - UlanSubject ID of preferred parent
-  recordType?: 'P' | 'C'; // varchar2(15) - UlanSubject record type (P - Person, C - Corporate body)
+  mergedStat?: GettySubjectMergedStatType; // varchar2(15) - Merge status (M - Merged, N - Not merged)
+  parentKey?: string; // number(30) - Subject ID of preferred parent
   sortOrder?: number; // number(10) - Sort order of subject record among preferred parent siblings
   specialProj?: string; // varchar2(25) - Name of special project associated with subject record
-  subjectId?: string; // number(30) - Unique identification number of an AAT record
-  terms?: UlanTerm[];
+  subjectId: string; // number(30) - Unique identification number of an AAT record
+  terms?: GettyTerm[];
+}
+
+export type AatSubjectRecordType = 'C' | 'F' | 'G' | 'H';
+
+export interface AatSubject extends GettySubject {
+  facetCode: string; // varchar2(10) - Facet code
+  recordType: AatSubjectRecordType; // varchar2(15) - Subject record type (C - Concept, F - Facet, G - Guide term, H - Hierarchy name)
+  scopeNotes?: AatScopeNote[];
+}
+
+export type UlanSubjectRecordType = 'P' | 'C';
+
+export interface UlanSubject extends GettySubject {
+  recordType?: UlanSubjectRecordType; // varchar2(15) - Subject record type (P - Person, C - Corporate body)
   biographies?: UlanBiography[];
   nationalities?: UlanNationality[];
   roles?: UlanRole[];
@@ -129,6 +155,7 @@ export interface AggOptions {
 export type SortOrder = 'asc' | 'desc';
 
 export interface ApiSearchParams {
+  index?: string;
   query?: string;
   gender?: string;
   nationality?: string;
@@ -154,3 +181,8 @@ export interface ApiSearchResponse {
   apiError?: string;
   error?: any;
 }
+
+// Type: See: https://github.com/vercel/next.js/discussions/46131
+export type GenericSearchParams = {
+  [key: string]: string | string[] | undefined;
+};

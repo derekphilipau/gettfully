@@ -8,6 +8,7 @@ export async function GET(request: Request) {
   const params = Object.fromEntries(searchParams.entries());
 
   const sanitizedParams: ApiSearchParams = {
+    index: searchParams.get('index') || '',
     query: searchParams.get('query') || '',
     gender: searchParams.get('gender') || '',
     nationality: searchParams.get('nationality') || '',

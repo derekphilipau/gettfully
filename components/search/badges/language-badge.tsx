@@ -1,4 +1,4 @@
-import type { UlanTerm } from '@/types';
+import type { GettyTerm } from '@/types';
 
 import { Button } from '@/components/ui/button';
 import {

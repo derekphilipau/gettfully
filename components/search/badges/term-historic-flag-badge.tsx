@@ -1,4 +1,4 @@
-import type { UlanTerm } from '@/types';
+import type { GettyTerm } from '@/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -7,7 +7,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 
-export function TermHistoricFlagBadge({ term }: { term: UlanTerm }) {
+export function TermHistoricFlagBadge({ term }: { term: GettyTerm }) {
   if (!term?.historicFlag || term?.historicFlag === 'NA') return null;
 
   return (

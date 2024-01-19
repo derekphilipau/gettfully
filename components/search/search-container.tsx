@@ -2,18 +2,20 @@
 
 import { Key, useEffect, useState } from 'react';
 import { getDictionary } from '@/dictionaries/dictionaries';
-import { set } from 'date-fns';
+import type { AatSubject, GettySubject, UlanSubject } from '@/types';
 
-import { UlanSubjectCard } from '@/components/search/ulan-subject-card';
+import { GettySubjectCard } from '@/components/search/getty-subject-card';
 import { DebouncedInput } from '@/components/searchold/debounced-input';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
 
-type Props = {};
+type Props = {
+  index?: string;
+};
 
-export function SearchContainer({}: Props) {
+export function SearchContainer({ index }: Props) {
   const [items, setItems] = useState<any[]>([]);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,6 +36,9 @@ export function SearchContainer({}: Props) {
   useEffect(() => {
     setIsLoading(true);
     const params = new URLSearchParams();
+    if (index) {
+      params.append('index', index);
+    }
     if (searchQuery) {
       params.append('query', searchQuery);
     }
@@ -78,6 +83,7 @@ export function SearchContainer({}: Props) {
     endYear,
     birthPlace,
     deathPlace,
+    index,
   ]);
 
   return (
@@ -144,9 +150,9 @@ export function SearchContainer({}: Props) {
       <div className="mt-4 flex flex-col flex-wrap gap-2">
         {items?.length > 0 &&
           items.map(
-            (item: any, i: Key) =>
+            (item: AatSubject | UlanSubject, i: Key) =>
               item && (
-                <UlanSubjectCard key={item.subjectId} ulanSubject={item} />
+                <GettySubjectCard key={item.subjectId} gettySubject={item} />
               )
           )}
         {!(items?.length > 0) && (

@@ -1,14 +1,17 @@
 import type {
+  GettyTerm,
+  GettyTermPreferred,
+  GettyTermVernacular,
   UlanBiography,
   UlanNationality,
   UlanRole,
+  UlanRoleHistoricFlag,
   UlanScopeNote,
   UlanSubject,
-  UlanTerm,
 } from '@/types';
 
+import { processFileLineByLine, writeJsonLFile } from '../util/fileUtils';
 import updateFromFile from '../util/updateFromFile';
-import { processFileLineByLine, writeJsonLFile } from './fileUtils';
 import { indexSettings } from './indexSettings';
 
 const INDEX_NAME = 'ulan-subjects';
@@ -61,25 +64,26 @@ export async function loadSubjectsMap(
 
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
-    const term: UlanTerm = {
+    const term: GettyTerm = {
       aacr2Flag: fields[0],
       displayDate: fields[1],
       displayName: fields[2],
       displayOrder: parseInt(fields[3]),
       endDate: parseInt(fields[4]),
-      historicFlag: fields[5],
+      historicFlag: fields[5] as UlanRoleHistoricFlag,
       otherFlags: fields[6],
-      preferred: fields[7],
+      preferred: fields[7] as GettyTermPreferred,
       startDate: parseInt(fields[8]),
       subjectId: fields[9],
-      termEntry: fields[10],
+      term: fields[10],
       termId: fields[11],
-      vernacular: fields[12],
+      vernacular: fields[12] as GettyTermVernacular,
     };
 
     const subject = subjectsMap.get(term.subjectId);
     if (!subject) {
       const subject: UlanSubject = {
+        type: 'ulan',
         subjectId: term.subjectId,
         terms: [term],
       };
@@ -101,7 +105,7 @@ async function addBiographyToSubjects(
   placesMap: Map<string, string>
 ) {
   await processFileLineByLine(biographyFilePath, async (line) => {
-    const fields = line.split('\t'); // Adjust based on actual file format
+    const fields = line.split('\t');
     const biography: UlanBiography = {
       bioId: fields[0],
       biographyText: fields[1],
@@ -146,7 +150,7 @@ async function addNationalityToSubjects(
   lookupMap: Map<string, string>
 ) {
   await processFileLineByLine(nationalityFilePath, async (line) => {
-    const fields = line.split('\t'); // Adjust based on actual file format
+    const fields = line.split('\t');
     const nationality: UlanNationality = {
       displayOrder: parseInt(fields[0]),
       nationalId: fields[1],
@@ -178,7 +182,7 @@ export function addRoleToSubjects(
   roleMap: Map<string, string>
 ) {
   return processFileLineByLine(roleFilePath, async (line) => {
-    const fields = line.split('\t'); // Adjust based on actual file format
+    const fields = line.split('\t');
     const role: UlanRole = {
       displayDate: fields[0],
       displayOrder: parseInt(fields[1]),
@@ -211,7 +215,7 @@ export function addScopeNotesToSubjects(
   lookupMap: Map<string, string>
 ) {
   return processFileLineByLine(scopeNotesFilePath, async (line) => {
-    const fields = line.split('\t'); // Adjust based on actual file format
+    const fields = line.split('\t');
     const scopeNote: UlanScopeNote = {
       scopeNoteId: fields[0],
       subjectId: fields[1],
