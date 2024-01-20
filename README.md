@@ -6,7 +6,7 @@ This project is a proof of concept for an Elasticsearch-powered Getty Vocabulari
 
 ## Website
 
-[https://gettfully.vercel.app/](https://gettfully.vercel.app/)
+[https://getty.musefully.org/](https://getty.musefully.org/)
 
 ## Design
 
@@ -38,16 +38,15 @@ AAT is a thesaurus containing generic terms in several languages, relationships,
 [AAT REL Data Dictionary](https://www.getty.edu/research/tools/vocabularies/aat/aat_rel_dd.pdf)
 [AAT Downloads](http://aatdownloads.getty.edu/)
 
-Currently Imported:
+## Development
 
-- **TERM.out**: The term table contains the various vocabulary entries (‘names’ in ULAN) for each subject record. One term for each subject must be declared 'preferred' (column 'preferred' = 'P') to form the subject record's overall title or label. Each subject record must have one and only one preferred term.
-- **BIOGRAPHY.out**: The biography table contains the biographical information of subject records.
-- **NATIONALITY.out**: The nationality table contains the nationality information of subject records.
+### Download & Install
 
-TBD:
+Fork/download this project and run `npm i` to install dependencies.
 
-- **SUBJECT.out**: While not directly related to the term or biography, this table provides essential subject-related status information and notes. It can be useful for context and linking.
-- **PLACE.out**: This might be useful if you are interested in including geographical context in your Elasticsearch documents, as it contains descriptions of places.
+Then, run the development server with `npm run dev` and open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+If you have not yet loaded the Elasticsearch data, you should see an error on the search page that the index does not exist.
 
 #### Local Development Insecure Elasticsearch
 
@@ -62,6 +61,34 @@ Once running, elasticsearch & kibana should be up and running at:
 
 1. Elasticsearch: http://0.0.0.0:9200/
 2. Kibana: http://0.0.0.0:5601/app/home#/
+
+### Environment Variables
+
+Once you have a running Elasticsearch service, you can add the connection details to the environment variables.
+
+For local development, add a local `.env.local` file in the root directory. If `ELASTICSEARCH_USE_CLOUD` is "true", the Elastic Cloud vars will be used, otherwise the \_HOST, \_PROTOCOL, \_PORT, \_CA_FILE, and \_API_KEY vars will be used. You may need to copy the http_ca.crt from the Elasticsearch Docker container to a local directory like `./secrets`.
+
+```
+ELASTICSEARCH_USE_CLOUD=false
+ELASTICSEARCH_CLOUD_ID=elastic-my-museum:dXMtY3VudHJhbDEuZ4NwLmNsb1VkLmVzLmlvOjQ0MyQ5ZEhiNWQ2NDM0NTB0ODgwOGE1MGVkZDViYzhjM2QwMSRjNmE2M2IwMmE3NDQ0YzU1YWU2YTg4YjI2ZTU5MzZmMg==
+ELASTICSEARCH_CLOUD_USERNAME=elastic
+ELASTICSEARCH_CLOUD_PASSWORD=changeme
+ELASTICSEARCH_LOCAL_NODE=http://localhost:9200
+ELASTICSEARCH_BULK_LIMIT=2000
+```
+
+### Load Vocabulary Data
+
+## Loading the data
+
+Go to the Getty download links above and download the REL relational data files for the vocabularies you want to load. Unzip the files and place them in the `/data/[vocab]/` directory, e.g. `/data/ulan/ulan_rel_0124`.
+
+Two data-loading commands are available:
+
+- `npm run load:ulan` - Load the ULAN vocabulary
+- `npm run load:aat` - Load the AAT vocabulary
+
+The import script will load data from the REL files in the data directory into Elasticsearch indices. **_Warning: This will modify Elasticsearch indices._**
 
 ## TODO
 
