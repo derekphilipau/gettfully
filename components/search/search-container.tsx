@@ -34,11 +34,26 @@ export function SearchContainer({}: Props) {
   const [totalPages, setTotalPages] = useState<number>(10);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const dict = getDictionary();
-  let errorMessage = dict['search.noResults'];
 
   function onSearch(q: string) {
     setSearchQuery(q);
   }
+
+  // Resets the page number to 1 whenever any of the search
+  // parameters change, EXCEPT for the page number itself.
+  useEffect(() => {
+    setPageNumber(1);
+  }, [
+    searchQuery,
+    index,
+    role,
+    gender,
+    nationality,
+    startYear,
+    endYear,
+    birthPlace,
+    deathPlace,
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -203,7 +218,9 @@ export function SearchContainer({}: Props) {
                   )
               )}
             {!(items?.length > 0) && !isLoading && (
-              <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
+              <h3 className="py-4 text-lg md:text-xl">
+                {dict['search.noResults']}
+              </h3>
             )}
           </div>
           <div className="mt-4 flex w-full justify-end">
