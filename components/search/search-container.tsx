@@ -10,7 +10,6 @@ import { GettySubjectCard } from '@/components/search/getty-subject-card';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '../ui/button';
-import { SearchFilterButton } from './search-filter-button';
 import { SearchFilters } from './search-filters';
 
 type Props = {};
@@ -108,7 +107,7 @@ export function SearchContainer({}: Props) {
           <RadioGroup
             defaultValue={index}
             onValueChange={setIndex}
-            className="mb-2 flex flex-wrap items-center sm:mb-0"
+            className="mt-2 flex flex-wrap items-center sm:my-0"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="" id="r1" />
@@ -125,17 +124,19 @@ export function SearchContainer({}: Props) {
           </RadioGroup>
         </div>
         {isFiltersOpen && (
-          <SearchFilters
-            onNationalityChange={setNationality}
-            onBirthPlaceChange={setBirthPlace}
-            onDeathPlaceChange={setDeathPlace}
-            onStartYearChange={setStartYear}
-            onEndYearChange={setEndYear}
-            onGenderChange={setGender}
-            startYear={startYear}
-            endYear={endYear}
-            gender={gender}
-          />
+          <div className="mt-2 sm:mt-0">
+            <SearchFilters
+              onNationalityChange={setNationality}
+              onBirthPlaceChange={setBirthPlace}
+              onDeathPlaceChange={setDeathPlace}
+              onStartYearChange={setStartYear}
+              onEndYearChange={setEndYear}
+              onGenderChange={setGender}
+              startYear={startYear}
+              endYear={endYear}
+              gender={gender}
+            />
+          </div>
         )}
       </div>
       <div className="mt-4 flex flex-col flex-wrap gap-2">

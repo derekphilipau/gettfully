@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const field = searchParams.get('field');
   const query = searchParams.get('query');
-  const size = searchParams.get('size') || OPTIONS_PAGE_SIZE;
+  const size = parseInt(searchParams.get('size') || '') || OPTIONS_PAGE_SIZE;
 
   if (!field)
     return NextResponse.json(

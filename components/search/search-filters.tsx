@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -41,7 +39,7 @@ export function SearchFilters({
           placeholder="Born After"
           className="w-28"
           value={startYear}
-          onChange={onStartYearChange}
+          onChange={(e) => onStartYearChange(e.target.value)}
         />
       </div>
       <div className="">
@@ -50,7 +48,7 @@ export function SearchFilters({
           placeholder="Died Before"
           className="w-28"
           value={endYear}
-          onChange={onEndYearChange}
+          onChange={(e) => onEndYearChange(e.target.value)}
         />
       </div>
       <RadioGroup
