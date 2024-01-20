@@ -11,11 +11,11 @@ export function getMultiMatchBoolQuery(
     bool: {
       must: [
         {
-          fuzzy: {
-            'terms.term.suggest': {
-              value: query,
-              fuzziness: 'AUTO',
-            },
+          multi_match: {
+            query: query,
+            fields: ['terms.term.suggest'],
+            type: 'best_fields',
+            fuzziness: 'AUTO',
           },
         },
       ],
