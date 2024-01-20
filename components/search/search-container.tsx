@@ -80,7 +80,6 @@ export function SearchContainer({}: Props) {
       .then((data) => {
         setItems(data.data);
         setIsLoading(false);
-        console.log('xxx', data.query);
       })
       .catch((error) => {
         console.error('Error fetching search results:', error);
