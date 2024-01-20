@@ -112,14 +112,14 @@ function SearchResults({
             value={key}
             className="flex flex-wrap items-center justify-between"
           >
-            <div className="flex items-center">
+            <div className="flex max-w-xs items-center sm:max-w-none">
               <Check
                 className={cn(
                   'mr-2 size-4',
                   selectedResult === key ? 'opacity-100' : 'opacity-0'
                 )}
               />
-              {key}
+              <div className="text-wrap">{key}</div>
             </div>
             <Badge variant="secondary">{doc_count}</Badge>
           </CommandItem>

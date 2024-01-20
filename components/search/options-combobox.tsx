@@ -48,7 +48,7 @@ export function OptionsCombobox({
           role="combobox"
           className={cn('justify-between', POPOVER_WIDTH)}
         >
-          <div className=" overflow-hidden text-ellipsis">{displayName}</div>
+          <div className="overflow-hidden text-ellipsis">{displayName}</div>
 
           <div className="flex gap-x-1">
             {selected && (
