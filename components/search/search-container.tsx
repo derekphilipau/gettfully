@@ -195,7 +195,7 @@ export function SearchContainer({}: Props) {
                     />
                   )
               )}
-            {!(items?.length > 0) && (
+            {!(items?.length > 0) && !isLoading && (
               <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
             )}
           </div>
