@@ -25,10 +25,14 @@ export function SearchIntro() {
         </h3>
         <ul className="ml-4 list-disc">
           <li>
-            Enter a simple term like &quot;picasso&quot;, &quot;pottery&quot;,
-            etc.
+            <em>Simple Search:</em> Enter a term like &quot;picasso&quot;,
+            &quot;pottery&quot;, etc.
           </li>
-          <li>OR Enter a Subject ID like &quot;500009666&quot;.</li>
+          <li>
+            <em>Subject ID:</em> Enter an ID like &quot;500009666&quot;.
+            Searching for &quot;500009&quot; finds all IDs starting with
+            &quot;500009&quot;
+          </li>
           <li>
             Check &quot;ULAN&quot; or &quot;AAT&quot; to limit search to
             specific vocabulary.

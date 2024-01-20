@@ -95,13 +95,20 @@ export function addQueryBoolFilterTerm(
 export function addQueryBoolFilterWildcardTerm(
   esQuery: any,
   name: string,
-  value: string | boolean | number | undefined
+  value: string | boolean | number | undefined,
+  type: 'prefix' | 'suffix' | 'both' = 'both'
 ): void {
   if (!value) return;
+  let wildcardValue = `*${value}*`;
+  if (type === 'prefix') {
+    wildcardValue = `${value}*`;
+  } else if (type === 'suffix') {
+    wildcardValue = `*${value}`;
+  }
   addQueryBoolFilter(esQuery, {
     wildcard: {
       [name]: {
-        value: `*${value}*`,
+        value: wildcardValue,
         case_insensitive: true,
       },
     },

@@ -61,7 +61,12 @@ export async function search(
   };
 
   if (isIdSearch) {
-    addQueryBoolFilterWildcardTerm(esQuery, 'subjectId', searchParams.query);
+    addQueryBoolFilterWildcardTerm(
+      esQuery,
+      'subjectId',
+      searchParams.query,
+      'prefix'
+    );
   }
 
   if (searchParams.gender) {
