@@ -32,7 +32,7 @@ export function DebouncedInput({
   };
 
   return (
-    <div className="relative flex grow items-stretch rounded-md shadow-sm focus-within:z-10">
+    <div className="relative flex grow items-stretch focus-within:z-10">
       <Input
         type="search"
         name="query"
@@ -40,10 +40,10 @@ export function DebouncedInput({
         onChange={onQueryChange}
         value={value}
         autoComplete="off"
-        className="h-12 px-3 py-2 text-xl"
+        className="rounded-md text-lg"
       />
       {isLoading && (
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
+        <div className="pointer-events-none absolute inset-y-0  right-0 flex items-center pr-9">
           <Loader2Icon
             className="size-6 animate-spin text-muted-foreground"
             aria-hidden="true"

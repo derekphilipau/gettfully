@@ -110,7 +110,7 @@ export function SearchContainer({}: Props) {
             variant="ghost"
             size="icon"
             aria-label="Show Filters"
-            className="size-12"
+            className="size-10"
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
           >
             <SlidersHorizontalIcon className="size-5" />
