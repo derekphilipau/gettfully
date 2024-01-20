@@ -9,7 +9,7 @@ type Props = {
 
 export default async function Page({ params, searchParams }: Props) {
   return (
-    <div className="md:container md:mx-auto">
+    <div className="container mx-auto">
       <SearchContainer />
     </div>
   );

@@ -127,7 +127,7 @@ export function SearchContainer({}: Props) {
   ]);
 
   return (
-    <section className="container pt-2">
+    <section className="">
       <div className="flex flex-col gap-y-2">
         <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:justify-normal">
           <DebouncedInput
