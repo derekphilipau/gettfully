@@ -43,10 +43,14 @@ export async function search(
   let size = searchParams.size || SEARCH_PAGE_SIZE;
   let pageNumber = searchParams.pageNumber || 1;
 
-  let boolQuery: T.QueryDslQueryContainer = searchParams.query
-    ? getMultiMatchBoolQuery(searchParams.query)
-    : //  getMatchAllBoolQuery()
-      getMatchAllBoolQuery();
+  const isIdSearch =
+    searchParams.query?.match(/^\d+$/) && searchParams.query?.length > 4;
+
+  let boolQuery: T.QueryDslQueryContainer =
+    searchParams.query && !isIdSearch
+      ? getMultiMatchBoolQuery(searchParams.query)
+      : //  getMatchAllBoolQuery()
+        getMatchAllBoolQuery();
 
   const esQuery: T.SearchRequest = {
     index,
@@ -55,6 +59,10 @@ export async function search(
     size,
     track_total_hits: true,
   };
+
+  if (isIdSearch) {
+    addQueryBoolFilterWildcardTerm(esQuery, 'subjectId', searchParams.query);
+  }
 
   if (searchParams.gender) {
     addQueryBoolFilterTerm(esQuery, 'biographies.sex', searchParams.gender);
@@ -88,78 +96,6 @@ export async function search(
     );
   }
 
-  /*
-  // Add search filters:
-  for (const aggField of aggFields) {
-    if (searchParams[aggField]) {
-      addQueryBoolFilterTerm(esQuery, aggField, searchParams[aggField]);
-    }
-  }
-  if (searchParams.visible === true) {
-    addQueryBoolFilterTerm(esQuery, 'visible', true);
-  }
-  if (searchParams.publicAccess === true) {
-    addQueryBoolFilterTerm(esQuery, 'publicAccess', true);
-  }
-
-  if (searchParams.hasImage === true) {
-    addQueryBoolFilterExists(esQuery, 'imageUrl');
-  }
-
-  if (searchParams.language) {
-    addQueryBoolLanguage(esQuery, searchParams.language);
-  }
-
-  // Date ranges
-  if (!searchParams.type) {
-    // Default search has special date range filter
-    // addDefaultQueryBoolDateRange(esQuery, searchParams);  TODO
-  }
-
-  if (searchParams.isNow) {
-    // Find Events & Exhibitions search that are going on right now
-    addQueryBoolDateRange(esQuery, new Date(), new Date());
-  }
-
-  if (searchParams.startDate || searchParams.endDate) {
-    addQueryBoolDateRange(
-      esQuery,
-      searchParams.startDate,
-      searchParams.endDate
-    );
-  }
-
-  if (searchParams.startYear || searchParams.endYear) {
-    addQueryBoolYearRange(
-      esQuery,
-      searchParams.startYear,
-      searchParams.endYear
-    );
-  }
-
-  // Add sort
-  if (searchParams.sortField && searchParams.sortOrder) {
-    esQuery.sort = [{ [searchParams.sortField]: searchParams.sortOrder }];
-  } else {
-    // Collection objects don't have a startDate (to account for BCE), so sort by startYear
-    // first, then startDate (so that both objects and events/exhibitions are sorted)
-    esQuery.sort = [{ startYear: 'desc' }, { startDate: 'desc' }];
-  }
-
-  // Include aggregations
-  addQueryAggs(esQuery);
-
-  // Remove rawSource and searchText from response
-  if (!searchParams.rawSource) {
-    esQuery._source = {
-      excludes: ['rawSource', 'searchText'],
-    };
-  } else {
-    esQuery._source = {
-      excludes: ['searchText'],
-    };
-  }
-  */
   // console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
