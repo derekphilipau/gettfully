@@ -14,6 +14,7 @@ export async function GET(request: Request) {
     nationality: searchParams.get('nationality') || '',
     birthPlace: searchParams.get('birthPlace') || '',
     deathPlace: searchParams.get('deathPlace') || '',
+    pageNumber: parseInt(searchParams.get('pageNumber') || '') || 1,
     isMinimal: searchParams.get('isMinimal') || '',
     size: parseInt(searchParams.get('size') || '') || SEARCH_PAGE_SIZE,
   };

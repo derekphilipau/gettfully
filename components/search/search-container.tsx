@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '../ui/button';
 import { SearchFilters } from './search-filters';
 import { SearchIntro } from './search-intro';
+import { SearchPagination } from './search-pagination';
 
 type Props = {};
 
@@ -28,12 +29,19 @@ export function SearchContainer({}: Props) {
   const [endYear, setEndYear] = useState<string>('');
   const [birthPlace, setBirthPlace] = useState<string>('');
   const [deathPlace, setDeathPlace] = useState<string>('');
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(10);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const dict = getDictionary();
   let errorMessage = dict['search.noResults'];
 
   function onSearch(q: string) {
     setSearchQuery(q);
+  }
+
+  function onPageNumberChange(pageNumber: number) {
+    setPageNumber(pageNumber);
+    window.scroll(0, 0);
   }
 
   useEffect(() => {
@@ -63,14 +71,21 @@ export function SearchContainer({}: Props) {
     if (deathPlace) {
       params.append('deathPlace', deathPlace);
     }
+
     // If params is empty, set is search empty to true:
     if (params.toString() === '') {
       setIsSearchEmpty(true);
       setItems([]);
       setIsLoading(false);
+      setPageNumber(1);
+      setTotalPages(0);
       return;
     } else {
       setIsSearchEmpty(false);
+    }
+
+    if (pageNumber) {
+      params.append('pageNumber', pageNumber.toString());
     }
 
     const currentUrl = `/api/search?${params.toString()}`;
@@ -80,12 +95,19 @@ export function SearchContainer({}: Props) {
       .then((data) => {
         setItems(data.data);
         setIsLoading(false);
+        if (data.metadata?.pages) {
+          setTotalPages(data.metadata.pages);
+        } else {
+          setTotalPages(0);
+        }
       })
       .catch((error) => {
         console.error('Error fetching search results:', error);
         setError(error?.message);
         setItems([]);
         setIsLoading(false);
+        setTotalPages(0);
+        setPageNumber(1);
       });
   }, [
     searchQuery,
@@ -95,13 +117,14 @@ export function SearchContainer({}: Props) {
     endYear,
     birthPlace,
     deathPlace,
+    pageNumber,
     index,
   ]);
 
   return (
     <section className="container pt-2">
       <div className="flex flex-col gap-y-2">
-        <div className="flex w-full flex-wrap gap-2">
+        <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:justify-normal">
           <DebouncedInput
             onSearchAsYouTypeChange={onSearch}
             isLoading={isLoading}
@@ -118,7 +141,7 @@ export function SearchContainer({}: Props) {
           <RadioGroup
             defaultValue={index}
             onValueChange={setIndex}
-            className="mt-2 flex flex-wrap items-center sm:my-0"
+            className="flex flex-wrap items-center"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="" id="r1" />
@@ -133,6 +156,11 @@ export function SearchContainer({}: Props) {
               <Label htmlFor="r3">AAT</Label>
             </div>
           </RadioGroup>
+          <SearchPagination
+            pageNumber={pageNumber}
+            totalPages={totalPages}
+            onPageNumberChange={onPageNumberChange}
+          />
         </div>
         {isFiltersOpen && (
           <div className="mt-2 sm:mt-0">
@@ -155,18 +183,30 @@ export function SearchContainer({}: Props) {
           <SearchIntro />
         </div>
       ) : (
-        <div className="mt-4 flex flex-col flex-wrap gap-1 sm:gap-2">
-          {items?.length > 0 &&
-            items.map(
-              (item: AatSubject | UlanSubject, i: Key) =>
-                item && (
-                  <GettySubjectCard key={item.subjectId} gettySubject={item} />
-                )
+        <>
+          <div className="mt-4 flex flex-col flex-wrap gap-1 sm:gap-2">
+            {items?.length > 0 &&
+              items.map(
+                (item: AatSubject | UlanSubject, i: Key) =>
+                  item && (
+                    <GettySubjectCard
+                      key={item.subjectId}
+                      gettySubject={item}
+                    />
+                  )
+              )}
+            {!(items?.length > 0) && (
+              <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
             )}
-          {!(items?.length > 0) && (
-            <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
-          )}
-        </div>
+          </div>
+          <div className="mt-4 flex w-full justify-end">
+            <SearchPagination
+              pageNumber={pageNumber}
+              totalPages={totalPages}
+              onPageNumberChange={setPageNumber}
+            />
+          </div>
+        </>
       )}
     </section>
   );

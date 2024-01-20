@@ -25,7 +25,7 @@ import {
 export const aggFields = [];
 
 const DEFAULT_INDICES = ['ulan-subjects', 'aat-subjects'];
-export const SEARCH_PAGE_SIZE = 48;
+export const SEARCH_PAGE_SIZE = 20;
 
 /**
  * Search for documents in one or more indices
@@ -41,6 +41,7 @@ export async function search(
     index = searchParams.index === 'ulan' ? 'ulan-subjects' : 'aat-subjects';
   }
   let size = searchParams.size || SEARCH_PAGE_SIZE;
+  let pageNumber = searchParams.pageNumber || 1;
 
   let boolQuery: T.QueryDslQueryContainer = searchParams.query
     ? getMultiMatchBoolQuery(searchParams.query)
@@ -50,7 +51,7 @@ export async function search(
   const esQuery: T.SearchRequest = {
     index,
     query: boolQuery,
-    from: 0,
+    from: (pageNumber - 1) * size || 0,
     size,
     track_total_hits: true,
   };
