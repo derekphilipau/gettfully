@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { ApiSearchParams } from '@/types';
 
-import { search } from '@/lib/elasticsearch/api/search';
+import { search, SEARCH_PAGE_SIZE } from '@/lib/elasticsearch/api/search';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -14,7 +14,10 @@ export async function GET(request: Request) {
     nationality: searchParams.get('nationality') || '',
     birthPlace: searchParams.get('birthPlace') || '',
     deathPlace: searchParams.get('deathPlace') || '',
+    isMinimal: searchParams.get('isMinimal') || '',
+    size: parseInt(searchParams.get('size') || '') || SEARCH_PAGE_SIZE,
   };
+
   const startYear = parseInt(searchParams.get('startYear') || '');
   const endYear = parseInt(searchParams.get('endYear') || '');
   if (!isNaN(startYear)) {

@@ -174,7 +174,7 @@ export interface ApiSearchResponseMetadata {
 
 export interface ApiSearchResponse {
   query?: SearchRequest;
-  data: UlanSubject[] | AggOption[];
+  data: (UlanSubject | AatSubject)[];
   // filters?: any; TODO
   options?: AggOptions;
   metadata?: ApiSearchResponseMetadata;

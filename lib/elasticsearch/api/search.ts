@@ -1,4 +1,5 @@
 import type {
+  AatSubject,
   AggOptions,
   ApiSearchParams,
   ApiSearchResponse,
@@ -24,7 +25,7 @@ import {
 export const aggFields = [];
 
 const DEFAULT_INDICES = ['ulan-subjects', 'aat-subjects'];
-const PAGE_SIZE = 48;
+export const SEARCH_PAGE_SIZE = 48;
 
 /**
  * Search for documents in one or more indices
@@ -34,11 +35,12 @@ const PAGE_SIZE = 48;
  */
 export async function search(
   searchParams: ApiSearchParams
-): Promise<ApiSearchResponse> {
+): Promise<(UlanSubject | AatSubject)[] | ApiSearchResponse> {
   let index: string | string[] = DEFAULT_INDICES;
   if (searchParams.index) {
     index = searchParams.index === 'ulan' ? 'ulan-subjects' : 'aat-subjects';
   }
+  let size = searchParams.size || SEARCH_PAGE_SIZE;
 
   let boolQuery: T.QueryDslQueryContainer = searchParams.query
     ? getMultiMatchBoolQuery(searchParams.query)
@@ -49,7 +51,7 @@ export async function search(
     index,
     query: boolQuery,
     from: 0,
-    size: PAGE_SIZE,
+    size,
     track_total_hits: true,
   };
 
@@ -161,9 +163,12 @@ export async function search(
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);
-  const metadata = getResponseMetadata(response, PAGE_SIZE, 0);
+  const metadata = getResponseMetadata(response, SEARCH_PAGE_SIZE, 0);
   const options = getResponseAggOptions(response);
   const data = response.hits.hits.map((hit) => hit._source) as UlanSubject[];
+  if (searchParams.isMinimal) {
+    return data;
+  }
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };
   return res;
 }
