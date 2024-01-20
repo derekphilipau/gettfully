@@ -39,11 +39,6 @@ export function SearchContainer({}: Props) {
     setSearchQuery(q);
   }
 
-  function onPageNumberChange(pageNumber: number) {
-    setPageNumber(pageNumber);
-    window.scroll(0, 0);
-  }
-
   useEffect(() => {
     setIsLoading(true);
     const params = new URLSearchParams();
@@ -100,6 +95,11 @@ export function SearchContainer({}: Props) {
         } else {
           setTotalPages(0);
         }
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
       })
       .catch((error) => {
         console.error('Error fetching search results:', error);
@@ -159,7 +159,7 @@ export function SearchContainer({}: Props) {
           <SearchPagination
             pageNumber={pageNumber}
             totalPages={totalPages}
-            onPageNumberChange={onPageNumberChange}
+            onPageNumberChange={setPageNumber}
           />
         </div>
         {isFiltersOpen && (
