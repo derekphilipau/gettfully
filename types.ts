@@ -157,12 +157,16 @@ export type SortOrder = 'asc' | 'desc';
 export interface ApiSearchParams {
   index?: string;
   query?: string;
+  role?: string;
   gender?: string;
   nationality?: string;
   startYear?: number;
   endYear?: number;
   birthPlace?: string;
   deathPlace?: string;
+  pageNumber?: number;
+  isMinimal?: string;
+  size?: number;
   [key: string]: any;
 }
 

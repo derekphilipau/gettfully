@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   const sanitizedParams: ApiSearchParams = {
     index: searchParams.get('index') || '',
     query: searchParams.get('query') || '',
+    role: searchParams.get('role') || '',
     gender: searchParams.get('gender') || '',
     nationality: searchParams.get('nationality') || '',
     birthPlace: searchParams.get('birthPlace') || '',

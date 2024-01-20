@@ -12,12 +12,19 @@ export function SearchFilters({
   onStartYearChange,
   onEndYearChange,
   onGenderChange,
+  onRoleChange,
   startYear,
   endYear,
   gender,
+  role,
 }) {
   return (
     <div className="flex flex-wrap gap-2">
+      <OptionsCombobox
+        title="Role"
+        field="roles.name"
+        onChange={onRoleChange}
+      />
       <OptionsCombobox
         title="Nationality"
         field="nationalities.name"

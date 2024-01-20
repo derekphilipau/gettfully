@@ -69,6 +69,9 @@ export async function search(
     );
   }
 
+  if (searchParams.role) {
+    addQueryBoolFilterWildcardTerm(esQuery, 'roles.name', searchParams.role);
+  }
   if (searchParams.gender) {
     addQueryBoolFilterTerm(esQuery, 'biographies.sex', searchParams.gender);
   }

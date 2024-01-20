@@ -23,6 +23,7 @@ export function SearchContainer({}: Props) {
   const [isSearchEmpty, setIsSearchEmpty] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [index, setIndex] = useState<string>('');
+  const [role, setRole] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [nationality, setNationality] = useState<string>('');
   const [startYear, setStartYear] = useState<string>('');
@@ -47,6 +48,9 @@ export function SearchContainer({}: Props) {
     }
     if (searchQuery) {
       params.append('query', searchQuery);
+    }
+    if (role) {
+      params.append('role', role);
     }
     if (gender) {
       params.append('gender', gender);
@@ -111,6 +115,7 @@ export function SearchContainer({}: Props) {
       });
   }, [
     searchQuery,
+    role,
     gender,
     nationality,
     startYear,
@@ -171,9 +176,11 @@ export function SearchContainer({}: Props) {
               onStartYearChange={setStartYear}
               onEndYearChange={setEndYear}
               onGenderChange={setGender}
+              onRoleChange={setRole}
               startYear={startYear}
               endYear={endYear}
               gender={gender}
+              role={role}
             />
           </div>
         )}
