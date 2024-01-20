@@ -11,15 +11,14 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
 
-type Props = {
-  index?: string;
-};
+type Props = {};
 
-export function SearchContainer({ index }: Props) {
+export function SearchContainer({}: Props) {
   const [items, setItems] = useState<any[]>([]);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [index, setIndex] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [nationality, setNationality] = useState<string>('');
   const [startYear, setStartYear] = useState<string>('');
@@ -88,29 +87,31 @@ export function SearchContainer({ index }: Props) {
   return (
     <section className="container pt-2">
       <div className="flex flex-col gap-y-2">
-        <DebouncedInput
-          onSearchAsYouTypeChange={onSearch}
-          isLoading={isLoading}
-        />
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="flex w-full flex-wrap gap-4">
+          <DebouncedInput
+            onSearchAsYouTypeChange={onSearch}
+            isLoading={isLoading}
+          />
           <RadioGroup
-            defaultValue={gender}
-            onValueChange={setGender}
-            className="flex h-8 flex-wrap items-center sm:h-auto"
+            defaultValue={index}
+            onValueChange={setIndex}
+            className="mb-2 flex flex-wrap items-center sm:mb-0"
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="" id="r1" />
-              <Label htmlFor="r1">All Genders</Label>
+              <Label htmlFor="r1">All Vocabularies</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="M" id="r2" />
-              <Label htmlFor="r2">Male</Label>
+              <RadioGroupItem value="ulan" id="r2" />
+              <Label htmlFor="r2">ULAN</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="F" id="r3" />
-              <Label htmlFor="r3">Female</Label>
+              <RadioGroupItem value="aat" id="r3" />
+              <Label htmlFor="r3">AAT</Label>
             </div>
           </RadioGroup>
+        </div>
+        <div className=" flex flex-wrap gap-2">
           <OptionsCombobox
             title="Nationality"
             field="nationalities.name"
@@ -144,6 +145,24 @@ export function SearchContainer({ index }: Props) {
               onChange={(e) => setEndYear(e.target.value)}
             />
           </div>
+          <RadioGroup
+            defaultValue={gender}
+            onValueChange={setGender}
+            className="flex h-10 flex-wrap items-center"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="" id="r1" />
+              <Label htmlFor="r1">All Genders</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="M" id="r2" />
+              <Label htmlFor="r2">Male</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="F" id="r3" />
+              <Label htmlFor="r3">Female</Label>
+            </div>
+          </RadioGroup>
         </div>
       </div>
       <div className="mt-4 flex flex-col flex-wrap gap-2">

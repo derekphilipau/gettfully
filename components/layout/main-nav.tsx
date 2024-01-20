@@ -28,30 +28,9 @@ export function MainNav({}: MainNavProps) {
         >
           <Logo className="h-10 fill-black object-contain dark:fill-white md:mr-2" />
           <span className="inline-block">
-            gett<span className="text-muted-foreground">full</span>y
+            gett
+            <span className="text-indigo-600 dark:text-indigo-400">full</span>y
           </span>
-        </Link>
-        <Link
-          href="/ulan"
-          className={cn(
-            'flex items-center text-lg font-semibold transition-colors',
-            basePath === 'ulan'
-              ? 'font-bold text-foreground hover:text-foreground/80'
-              : 'text-foreground/60 hover:text-foreground/80'
-          )}
-        >
-          ULAN
-        </Link>
-        <Link
-          href="/aat"
-          className={cn(
-            'flex items-center text-lg font-semibold transition-colors',
-            basePath === 'aat'
-              ? 'font-bold text-foreground hover:text-foreground/80'
-              : 'text-foreground/60 hover:text-foreground/80'
-          )}
-        >
-          AAT
         </Link>
       </nav>
     </div>

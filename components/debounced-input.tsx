@@ -32,28 +32,24 @@ export function DebouncedInput({
   };
 
   return (
-    <form>
-      <div className="flex rounded-md shadow-sm">
-        <div className="relative flex grow items-stretch focus-within:z-10">
-          <Input
-            type="search"
-            name="query"
-            placeholder={dict['search.search']}
-            onChange={onQueryChange}
-            value={value}
-            autoComplete="off"
-            className="h-12 px-3 py-2 text-xl"
+    <div className="relative flex grow items-stretch rounded-md shadow-sm focus-within:z-10">
+      <Input
+        type="search"
+        name="query"
+        placeholder={dict['search.search']}
+        onChange={onQueryChange}
+        value={value}
+        autoComplete="off"
+        className="h-12 px-3 py-2 text-xl"
+      />
+      {isLoading && (
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
+          <Loader2Icon
+            className="size-6 animate-spin text-muted-foreground"
+            aria-hidden="true"
           />
-          {isLoading && (
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-10">
-              <Loader2Icon
-                className="size-6 animate-spin text-muted-foreground"
-                aria-hidden="true"
-              />
-            </div>
-          )}
         </div>
-      </div>
-    </form>
+      )}
+    </div>
   );
 }
