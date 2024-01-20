@@ -16,7 +16,7 @@ interface DebouncedInputProps {
 
 export function DebouncedInput({
   onSearchAsYouTypeChange,
-  debounceTime = 200,
+  debounceTime = 400,
   isLoading = false,
 }: DebouncedInputProps) {
   const dict = getDictionary();
