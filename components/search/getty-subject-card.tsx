@@ -19,7 +19,7 @@ export function GettySubjectCard({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-lg border p-3">
+    <div className="rounded-lg border p-2 sm:p-3">
       <Collapsible
         open={isOpen}
         onOpenChange={setIsOpen}

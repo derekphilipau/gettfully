@@ -156,7 +156,7 @@ export function SearchContainer({}: Props) {
           <SearchIntro />
         </div>
       ) : (
-        <div className="mt-4 flex flex-col flex-wrap gap-2">
+        <div className="mt-4 flex flex-col flex-wrap gap-1 sm:gap-2">
           {items?.length > 0 &&
             items.map(
               (item: AatSubject | UlanSubject, i: Key) =>

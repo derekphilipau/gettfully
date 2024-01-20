@@ -38,10 +38,12 @@ export function UlanSubjectHeader({
   return (
     <div className="flex w-full flex-col items-start">
       <div className="flex flex-wrap items-start gap-x-2">
-        <div className="flex items-start gap-x-1 text-lg font-semibold sm:text-xl">
+        <div className="flex items-start gap-x-1 text-lg ">
           <div>
-            <h2 className="flex flex-wrap items-center gap-x-2">
-              {ulanSubject.terms?.[0]?.term}
+            <div className="flex flex-wrap items-center gap-x-2">
+              <h2 className="text-base font-semibold sm:text-lg md:text-xl">
+                {ulanSubject.terms?.[0]?.term}
+              </h2>
               <Badge variant="outline">
                 {ulanSubject.subjectId}
                 <CopyButton value={ulanSubject.subjectId || ''} />
@@ -53,11 +55,11 @@ export function UlanSubjectHeader({
                 )}
                 href={`http://vocab.getty.edu/page/${vocabulary}/${ulanSubject.subjectId}`}
               >
-                Getty
-                <ExternalLinkIcon className="ml-2 size-4" />
+                <span className="hidden sm:inline-block">Getty</span>
+                <ExternalLinkIcon className="size-4 sm:ml-2" />
                 <span className="sr-only">Getty Link</span>
               </Link>
-            </h2>
+            </div>
             {preferredBiography && (
               <div className="text-sm text-muted-foreground sm:text-base">
                 {preferredBiography.biographyText}
