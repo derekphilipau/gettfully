@@ -28,8 +28,9 @@ export function MainNav({}: MainNavProps) {
         >
           <Logo className="h-10 fill-black object-contain dark:fill-white md:mr-2" />
           <span className="inline-block">
-            gett
-            <span className="text-indigo-600 dark:text-indigo-400">full</span>y
+            <span className="text-foreground">gett</span>
+            <span className="text-indigo-600 dark:text-indigo-400">full</span>
+            <span className="text-foreground">y</span>
           </span>
         </Link>
       </nav>

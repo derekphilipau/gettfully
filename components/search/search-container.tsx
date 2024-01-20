@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '../ui/button';
 import { SearchFilters } from './search-filters';
+import { SearchIntro } from './search-intro';
 
 type Props = {};
 
@@ -18,6 +19,7 @@ export function SearchContainer({}: Props) {
   const [items, setItems] = useState<any[]>([]);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSearchEmpty, setIsSearchEmpty] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [index, setIndex] = useState<string>('');
   const [gender, setGender] = useState<string>('');
@@ -61,6 +63,16 @@ export function SearchContainer({}: Props) {
     if (deathPlace) {
       params.append('deathPlace', deathPlace);
     }
+    // If params is empty, set is search empty to true:
+    if (params.toString() === '') {
+      setIsSearchEmpty(true);
+      setItems([]);
+      setIsLoading(false);
+      return;
+    } else {
+      setIsSearchEmpty(false);
+    }
+
     const currentUrl = `/api/search?${params.toString()}`;
 
     fetch(currentUrl)
@@ -139,18 +151,24 @@ export function SearchContainer({}: Props) {
           </div>
         )}
       </div>
-      <div className="mt-4 flex flex-col flex-wrap gap-2">
-        {items?.length > 0 &&
-          items.map(
-            (item: AatSubject | UlanSubject, i: Key) =>
-              item && (
-                <GettySubjectCard key={item.subjectId} gettySubject={item} />
-              )
+      {isSearchEmpty ? (
+        <div className="my-6 flex w-full justify-center">
+          <SearchIntro />
+        </div>
+      ) : (
+        <div className="mt-4 flex flex-col flex-wrap gap-2">
+          {items?.length > 0 &&
+            items.map(
+              (item: AatSubject | UlanSubject, i: Key) =>
+                item && (
+                  <GettySubjectCard key={item.subjectId} gettySubject={item} />
+                )
+            )}
+          {!(items?.length > 0) && (
+            <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
           )}
-        {!(items?.length > 0) && (
-          <h3 className="my-10 mb-4 text-lg md:text-xl">{errorMessage}</h3>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }

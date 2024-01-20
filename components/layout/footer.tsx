@@ -19,7 +19,11 @@ export function Footer({ items }: FooterProps) {
             href="/"
             className="mb-2 flex items-center space-x-2 text-xl font-bold"
           >
-            {dict['site.title']}
+            <span className="inline-block">
+              <span className="text-foreground">gett</span>
+              <span className="text-indigo-600 dark:text-indigo-400">full</span>
+              <span className="text-foreground">y</span>
+            </span>
           </Link>
           {}
           <p className="text-xs">{dict['footer.text']}</p>
