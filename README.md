@@ -2,7 +2,9 @@
 
 ## About
 
-This project is a proof of concept for an Elasticsearch-powered Getty Vocabularies faceted search. The goal is to provide a simple, fast, and easy to use search interface for the Getty Vocabularies.
+This project provides a simple, fast, powerful, and easy to use search interface for the Getty Vocabularies. 
+
+It’s powered by [Elasticsearch](https://www.elastic.co/) and [Next.js](https://nextjs.org/) with [shadcn-ui](https://github.com/shadcn-ui/ui), [Radix UI](https://www.radix-ui.com/), and [Tailwind CSS](https://tailwindcss.com/).
 
 ## Website
 
@@ -18,13 +20,41 @@ Relational data files are imported into Elasticsearch using the [Elasticsearch B
 
 Each vocabulary is represented by a separate Elasticsearch index, e.g. `ulan-subjects`, `aat-subjects`, etc.
 
+### API
+
+The Next.js API routes are used to provide a simple REST API for the search interface. The API routes are located in the `/app/api` directory.
+
+#### GET /api/search
+
+Primary search endpoint.
+
+Search parameters:
+- ***index***: The Elasticsearch vocabulary to search, e.g. `ulan`, `aat`.  If not specified, all vocabularies will be searched.
+- ***query***: The search query string.
+- ***role***: The role, e.g. `artist`, `architect`, `painter`, etc.
+- ***gender***: The gender, e.g. `male`, `female` (ULAN only supports these two).
+- ***nationality***: Nationality, e.g. `American`, `French`, etc.
+- ***birthPlace***: Birth place, e.g. `Brooklyn (New York City, New York state, United States) (borough)`
+- ***deathPlace***: Death place
+- ***pageNumber***: Current page number.  1-based.
+- ***isMinimal***: If true, only return minimal data for each result. (Useful for GPT endpoints.)
+
+#### GET /api/options
+
+Search for option buckets within an Elasticsearch aggregation.  This is used to provide autocomplete options for the search interface filters.
+
+Search parameters:
+- ***field***: The field to return options for, e.g. `roles.name`, `nationalities.name`, `biographies.birthPlaceName`, `biographies.deathPlaceName`.
+- ***query***: The search query string.
+- ***size***: The maximum number of options to return.
+
 ## Getty Vocabularies
 
 The Getty Vocabularies contain structured terminology for art, architecture, decorative arts and other material culture, archival materials, visual surrogates, and bibliographic materials. Compliant with international standards, they provide authoritative information for catalogers, researchers, and data providers.
 
 ### The Getty Union List of Artist Names (ULAN)
 
-The Union List of Artist Names ® (ULAN), the Art & Architecture Thesaurus ® (AAT), the Getty Thesaurus of Geographic Names ® (TGN). the Cultural Objects Name Authority ® (CONA), and the Iconography Authority ™ (IA) are structured resources that can be used to improve access to information about art, architecture, and other material culture. The Vocabularies are not simply 'value vocabularies,' but knowledge bases. Through rich metadata and links, the Getty Vocabularies provide powerful conduits for knowledge creation, complex research, and discovery for digital art history and related disciplines.
+The Union List of Artist Names ® (ULAN) contains information about people and corporate bodies related to the creation and maintenance of art and architecture. It includes names, rich relationships, notes, sources, and biographical information for artists, architects, firms, studios, repositories, and patrons, both named and anonymous.
 
 [ULAN Online Search](https://www.getty.edu/research/tools/vocabularies/ulan/index.html)
 [ULAN REL Data Dictionary](https://www.getty.edu/research/tools/vocabularies/ulan/ulan_rel_dd.pdf)
@@ -89,6 +119,14 @@ Two data-loading commands are available:
 - `npm run load:aat` - Load the AAT vocabulary
 
 The import script will load data from the REL files in the data directory into Elasticsearch indices. **_Warning: This will modify Elasticsearch indices._**
+
+## Screenshots
+
+Left: Showing fuzzy search results for misspelled artist name.
+
+Right: Filtered search for female artists born in Brooklyn.
+
+![Light Mode Screenshot](./docs/img/gettfully.png)
 
 ## TODO
 
