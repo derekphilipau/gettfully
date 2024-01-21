@@ -12,8 +12,8 @@ export function Footer({ items }: FooterProps) {
   const dict = getDictionary(); // en
 
   return (
-    <div className="container p-6">
-      <div className="mt-10 md:flex md:items-center md:justify-between md:space-x-6">
+    <div className="container mx-auto pb-6">
+      <div className=" md:flex md:items-center md:justify-between md:space-x-6">
         <div>
           <Link
             href="/"
