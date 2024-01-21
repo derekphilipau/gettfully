@@ -1,7 +1,6 @@
 'use client';
 
 import { ChangeEvent, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { getDictionary } from '@/dictionaries/dictionaries';
 import { Loader2Icon } from 'lucide-react';
 
@@ -12,18 +11,20 @@ interface DebouncedInputProps {
   onSearchAsYouTypeChange: (searchQuery: string) => void;
   debounceTime?: number;
   isLoading?: boolean;
+  value?: string;
 }
 
 export function DebouncedInput({
   onSearchAsYouTypeChange,
   debounceTime = 400,
   isLoading = false,
+  value = '',
 }: DebouncedInputProps) {
   const dict = getDictionary();
-  const [value, setValue] = useState('');
+  const [myValue, setValue] = useState(value);
 
   const debouncedSuggest = useDebounce(() => {
-    onSearchAsYouTypeChange(value);
+    onSearchAsYouTypeChange(myValue);
   }, debounceTime);
 
   const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +39,7 @@ export function DebouncedInput({
         name="query"
         placeholder={dict['search.search']}
         onChange={onQueryChange}
-        value={value}
+        value={myValue}
         autoComplete="off"
         className="rounded-md text-lg"
       />

@@ -108,7 +108,7 @@ export async function search(
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);
-  const metadata = getResponseMetadata(response, SEARCH_PAGE_SIZE, 0);
+  const metadata = getResponseMetadata(response, SEARCH_PAGE_SIZE);
   const options = getResponseAggOptions(response);
   const data = response.hits.hits.map((hit) => hit._source) as UlanSubject[];
   if (searchParams.isMinimal) {
@@ -127,13 +127,12 @@ export async function search(
  */
 function getResponseMetadata(
   response: T.SearchTemplateResponse,
-  size: number,
-  pageNumber: number = 1
+  size: number
 ): ApiSearchResponseMetadata {
   let total = response?.hits?.total || 0; // Returns either number or SearchTotalHits
   if (typeof total !== 'number') total = total.value;
   const pages = Math.ceil(total / size);
-  return { total, pages, pageNumber };
+  return { total, pages };
 }
 
 /**
