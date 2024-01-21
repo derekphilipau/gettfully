@@ -20,8 +20,10 @@ export function Footer({ items }: FooterProps) {
             className="mb-2 flex items-center space-x-2 text-xl font-bold"
           >
             <span className="inline-block">
-              <span className="text-foreground">gett</span>
-              <span className="text-indigo-600 dark:text-indigo-400">full</span>
+              <span className="text-foreground">Gett</span>
+              <span className="text-neutral-500 dark:text-neutral-400">
+                full
+              </span>
               <span className="text-foreground">y</span>
             </span>
           </Link>

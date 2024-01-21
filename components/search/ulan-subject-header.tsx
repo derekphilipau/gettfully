@@ -50,8 +50,8 @@ export function UlanSubjectHeader({
               </Badge>
               <Link
                 className={cn(
-                  buttonVariants({ size: 'sm', variant: 'link' }),
-                  'h-9 rounded-md px-1'
+                  buttonVariants({ size: 'sm', variant: 'ghost' }),
+                  'rounded-md px-1 py-0.5 text-xs text-foreground visited:text-foreground hover:text-foreground sm:px-2.5'
                 )}
                 href={`http://vocab.getty.edu/page/${vocabulary}/${ulanSubject.subjectId}`}
               >
