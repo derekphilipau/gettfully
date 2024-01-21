@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "format": "prettier --check --ignore-path .gitignore .",
     "load:ulan": "npx ts-node ./lib/commands/importUlanCommand.ts",
-    "load:aat": "npx ts-node ./lib/commands/importAatCommand.ts"
+    "load:aat": "npx ts-node ./lib/commands/importAatCommand.ts",
+    "load:tgn": "npx ts-node ./lib/commands/importTgnCommand.ts"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.11.0",

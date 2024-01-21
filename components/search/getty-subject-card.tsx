@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { AatSubject, UlanSubject } from '@/types';
+import type { AatSubject, TgnSubject, UlanSubject } from '@/types';
 import { ChevronsUpDownIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { UlanSubjectHeader } from './ulan-subject-header';
 export function GettySubjectCard({
   gettySubject,
 }: {
-  gettySubject: UlanSubject | AatSubject;
+  gettySubject: UlanSubject | AatSubject | TgnSubject;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 

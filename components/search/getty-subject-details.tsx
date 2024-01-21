@@ -1,16 +1,17 @@
-import type { AatSubject, UlanSubject } from '@/types';
+import type { AatSubject, TgnSubject, UlanSubject } from '@/types';
 
 import { cn } from '@/lib/utils';
 import { LanguageBadge } from './badges/language-badge';
 import { PreferredBadge } from './badges/preferred-badge';
 import { TermHistoricFlagBadge } from './badges/term-historic-flag-badge';
 import { TermVernacularBadge } from './badges/term-vernacular-badge';
+import { TgnSubjectDetails } from './tgn-subject-details';
 import { UlanSubjectDetails } from './ulan-subject-details';
 
 export function GettySubjectDetails({
   gettySubject,
 }: {
-  gettySubject: UlanSubject | AatSubject;
+  gettySubject: UlanSubject | AatSubject | TgnSubject;
 }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
@@ -57,6 +58,9 @@ export function GettySubjectDetails({
       )}
       {gettySubject.type === 'ulan' && (
         <UlanSubjectDetails ulanSubject={gettySubject as UlanSubject} />
+      )}
+      {gettySubject.type === 'tgn' && (
+        <TgnSubjectDetails tgnSubject={gettySubject as TgnSubject} />
       )}
     </div>
   );

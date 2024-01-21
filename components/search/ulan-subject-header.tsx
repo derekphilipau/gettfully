@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type {
   AatSubject,
   GettySubject,
+  TgnSubject,
   UlanBiography,
   UlanSubject,
 } from '@/types';
@@ -27,7 +28,7 @@ function getPreferredBiography(ulanSubject: UlanSubject) {
 export function UlanSubjectHeader({
   ulanSubject,
 }: {
-  ulanSubject: UlanSubject | AatSubject;
+  ulanSubject: UlanSubject | AatSubject | TgnSubject;
 }) {
   const preferredBiography = getPreferredBiography(ulanSubject as UlanSubject);
 

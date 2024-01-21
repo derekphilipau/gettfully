@@ -1,4 +1,13 @@
-import type { AatScopeNote, AatSubject, GettyTerm } from '@/types';
+import type {
+  AatSubject,
+  AatSubjectRecordType,
+  GettyScopeNote,
+  GettySubjectMergedStatType,
+  GettyTerm,
+  GettyTermHistoricFlag,
+  GettyTermPreferred,
+  GettyTermVernacular,
+} from '@/types';
 
 import { processFileLineByLine, writeJsonLFile } from '../util/fileUtils';
 import updateFromFile from '../util/updateFromFile';
@@ -17,9 +26,9 @@ export async function loadSubjectsMap(
       type: 'aat',
       facetCode: fields[0],
       legacyId: fields[1],
-      mergedStat: fields[2] as 'M' | 'N',
+      mergedStat: fields[2] as GettySubjectMergedStatType,
       parentKey: fields[3],
-      recordType: fields[4] as 'C' | 'F' | 'G' | 'H',
+      recordType: fields[4] as AatSubjectRecordType,
       sortOrder: fields[5] ? parseInt(fields[5]) : undefined,
       specialProj: fields[6],
       subjectId: fields[7],
@@ -42,14 +51,14 @@ async function addTermToSubjects(
       displayName: fields[2],
       displayOrder: parseInt(fields[3]),
       endDate: parseInt(fields[4]),
-      historicFlag: fields[5] as 'B' | 'C' | 'H' | 'NA',
+      historicFlag: fields[5] as GettyTermHistoricFlag,
       otherFlags: fields[6],
-      preferred: fields[7] as 'P' | 'V',
+      preferred: fields[7] as GettyTermPreferred,
       startDate: parseInt(fields[8]),
       subjectId: fields[9],
       term: fields[10],
       termId: fields[11],
-      vernacular: fields[12] as 'V' | 'O' | 'U',
+      vernacular: fields[12] as GettyTermVernacular,
     };
 
     if (subjectsMap.has(term.subjectId)) {
@@ -70,7 +79,7 @@ export function addScopeNotesToSubjects(
 ) {
   return processFileLineByLine(scopeNotesFilePath, async (line) => {
     const fields = line.split('\t');
-    const scopeNote: AatScopeNote = {
+    const scopeNote: GettyScopeNote = {
       scopeNoteId: fields[0],
       subjectId: fields[1],
       languageCode: fields[2],

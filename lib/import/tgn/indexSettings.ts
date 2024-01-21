@@ -6,7 +6,18 @@ import {
   gettyTermObjectField,
 } from '../globalIndexSettings';
 
-const aatSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
+export const tgnCoordinatesObjectField: T.MappingProperty = {
+  properties: {
+    elevationFeet: S.integerField,
+    elevationMeters: S.integerField,
+    location: S.geoPointField,
+    boundingBoxLeast: S.geoPointField,
+    boundingBoxMost: S.geoPointField,
+    subjectId: S.keywordField,
+  },
+};
+
+export const tgnSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
   facetCode: S.keywordField,
   legacyId: S.keywordField,
   mergedStat: S.keywordField,
@@ -17,6 +28,7 @@ const aatSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
   subjectId: S.keywordField,
   terms: gettyTermObjectField,
   scopeNotes: gettyScopeNoteObjectField,
+  coordinates: tgnCoordinatesObjectField,
 };
 
 export const indexSettings: T.IndicesIndexSettings = {
@@ -25,6 +37,6 @@ export const indexSettings: T.IndicesIndexSettings = {
     analysis: S.analysis,
   },
   mappings: {
-    properties: aatSubjectDocument,
+    properties: tgnSubjectDocument,
   },
 };

@@ -1,6 +1,10 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 
 import * as S from '@/lib/elasticsearch/settings';
+import {
+  gettyScopeNoteObjectField,
+  gettyTermObjectField,
+} from '../globalIndexSettings';
 
 export const biographyObjectField: T.MappingProperty = {
   properties: {
@@ -44,34 +48,6 @@ export const roleObjectField: T.MappingProperty = {
   },
 };
 
-export const scopeNoteObjectField: T.MappingProperty = {
-  properties: {
-    scopeNoteId: S.keywordField,
-    subjectId: S.keywordField,
-    languageCode: S.keywordField,
-    languageName: S.keywordField,
-    noteText: S.textField,
-  },
-};
-
-const termObjectField: T.MappingProperty = {
-  properties: {
-    aacr2Flag: S.keywordField,
-    displayDate: S.keywordField,
-    displayName: S.keywordField,
-    displayOrder: S.integerField,
-    endDate: S.keywordField,
-    historicFlag: S.keywordField,
-    otherFlags: S.keywordField,
-    preferred: S.keywordField,
-    startDate: S.keywordField,
-    subjectId: S.keywordField,
-    term: S.suggestUnaggregatedStandardAnalyzerField,
-    termId: S.keywordField,
-    vernacular: S.keywordField,
-  },
-};
-
 const ulanSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
   legacyId: S.keywordField,
   mergedStat: S.keywordField,
@@ -82,11 +58,11 @@ const ulanSubjectDocument: Record<T.PropertyName, T.MappingProperty> = {
   subjectId: S.keywordField,
   // don't worry about nesting these for now
   // later use nesting if need to search by multiple fields within an object
-  terms: termObjectField,
+  terms: gettyTermObjectField,
   biographies: biographyObjectField,
   nationalities: nationalityObjectField,
   roles: roleObjectField,
-  scopeNotes: scopeNoteObjectField,
+  scopeNotes: gettyScopeNoteObjectField,
 };
 
 export const indexSettings: T.IndicesIndexSettings = {

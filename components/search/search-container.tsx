@@ -2,7 +2,7 @@
 
 import { Key, useEffect, useState } from 'react';
 import { getDictionary } from '@/dictionaries/dictionaries';
-import type { AatSubject, UlanSubject } from '@/types';
+import type { AatSubject, TgnSubject, UlanSubject } from '@/types';
 import { SlidersHorizontalIcon } from 'lucide-react';
 
 import { DebouncedInput } from '@/components/debounced-input';
@@ -175,6 +175,10 @@ export function SearchContainer({}: Props) {
               <RadioGroupItem value="aat" id="r3" />
               <Label htmlFor="r3">AAT</Label>
             </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="tgn" id="r3" />
+              <Label htmlFor="r3">TGN</Label>
+            </div>
           </RadioGroup>
           <SearchPagination
             pageNumber={pageNumber}
@@ -209,7 +213,7 @@ export function SearchContainer({}: Props) {
           <div className="mt-4 flex flex-col flex-wrap gap-1 sm:gap-2">
             {items?.length > 0 &&
               items.map(
-                (item: AatSubject | UlanSubject, i: Key) =>
+                (item: AatSubject | UlanSubject | TgnSubject, i: Key) =>
                   item && (
                     <GettySubjectCard
                       key={item.subjectId}

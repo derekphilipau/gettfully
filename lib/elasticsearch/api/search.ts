@@ -4,6 +4,7 @@ import type {
   ApiSearchParams,
   ApiSearchResponse,
   ApiSearchResponseMetadata,
+  TgnSubject,
   UlanSubject,
 } from '@/types';
 import * as T from '@elastic/elasticsearch/lib/api/types';
@@ -24,7 +25,7 @@ import {
 
 export const aggFields = [];
 
-const DEFAULT_INDICES = ['ulan-subjects', 'aat-subjects'];
+const DEFAULT_INDICES = ['ulan-subjects', 'aat-subjects', 'tgn-subjects'];
 export const SEARCH_PAGE_SIZE = 20;
 
 /**
@@ -35,10 +36,16 @@ export const SEARCH_PAGE_SIZE = 20;
  */
 export async function search(
   searchParams: ApiSearchParams
-): Promise<(UlanSubject | AatSubject)[] | ApiSearchResponse> {
+): Promise<(UlanSubject | AatSubject | TgnSubject)[] | ApiSearchResponse> {
   let index: string | string[] = DEFAULT_INDICES;
   if (searchParams.index) {
-    index = searchParams.index === 'ulan' ? 'ulan-subjects' : 'aat-subjects';
+    if (searchParams.index === 'ulan') {
+      index = 'ulan-subjects';
+    } else if (searchParams.index === 'aat') {
+      index = 'aat-subjects';
+    } else if (searchParams.index === 'tgn') {
+      index = 'tgn-subjects';
+    }
   }
   let size = searchParams.size || SEARCH_PAGE_SIZE;
   let pageNumber = searchParams.pageNumber || 1;
@@ -104,7 +111,7 @@ export async function search(
     );
   }
 
-  // console.log(JSON.stringify(esQuery, null, 2));
+  console.log(JSON.stringify(esQuery, null, 2));
 
   const client = getClient();
   const response: T.SearchTemplateResponse = await client.search(esQuery);

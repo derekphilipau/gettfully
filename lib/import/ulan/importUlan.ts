@@ -1,4 +1,5 @@
 import type {
+  GettyScopeNote,
   GettyTerm,
   GettyTermPreferred,
   GettyTermVernacular,
@@ -6,7 +7,6 @@ import type {
   UlanNationality,
   UlanRole,
   UlanRoleHistoricFlag,
-  UlanScopeNote,
   UlanSubject,
 } from '@/types';
 
@@ -216,7 +216,7 @@ export function addScopeNotesToSubjects(
 ) {
   return processFileLineByLine(scopeNotesFilePath, async (line) => {
     const fields = line.split('\t');
-    const scopeNote: UlanScopeNote = {
+    const scopeNote: GettyScopeNote = {
       scopeNoteId: fields[0],
       subjectId: fields[1],
       languageCode: fields[2],

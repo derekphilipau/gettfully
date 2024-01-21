@@ -59,6 +59,8 @@ export const integerField: T.MappingProperty = { type: 'integer' };
 export const dateField: T.MappingProperty = { type: 'date' };
 export const nestedField: T.MappingProperty = { type: 'nested' };
 
+export const geoPointField: T.MappingProperty = { type: 'geo_point' };
+
 export const unaggregatedStandardAnalyzerTextField: T.MappingProperty = {
   type: 'text',
   analyzer: 'unaggregatedStandardAnalyzer',

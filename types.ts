@@ -1,6 +1,7 @@
+import * as T from '@elastic/elasticsearch/lib/api/types';
 import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 
-export type GettyVocabulary = 'aat' | 'ulan';
+export type GettyVocabulary = 'aat' | 'ulan' | 'tgn';
 
 /**
  * See ULAN REL data dictionary:
@@ -61,18 +62,6 @@ export interface UlanRole {
 }
 
 /**
- * Table: SCOPE_NOTES
- * Descriptive notes linked to a subject record associated with a particular language
- */
-export interface UlanScopeNote {
-  scopeNoteId: string; // number (30) Unique ID for a scope note record
-  subjectId: string; // number (30) ID of subject record related to contributor
-  languageCode: string; // varchar2 (15) Numeric code indicating the language of the descriptive note
-  languageName?: string; // Name of language (lookup)
-  noteText: string; // varchar2 (4000) The descriptive note text
-}
-
-/**
  * Table: TERM
  * Description: The term table contains the various vocabulary entries (‘names’ in ULAN, 'terms' in AAT)
  * for each subject record. One term for each subject must be declared 'preferred' (column
@@ -99,11 +88,16 @@ export interface GettyTerm {
   vernacular: GettyTermVernacular; // char (1) Flag indicating whether or not the term is the vernacular for a certain place
 }
 
-export interface AatScopeNote {
-  scopeNoteId: string; // number(30) - Unique ID for a scope note record
-  subjectId: string; // number(30) - ID of subject record related to scope note
-  languageCode: string; // varchar2(15) - Numeric code indicating the language of the descriptive note
-  noteText: string; // varchar2(4000) - The descriptive note text
+/**
+ * Table: SCOPE_NOTES
+ * Descriptive notes linked to a subject record associated with a particular language
+ */
+export interface GettyScopeNote {
+  scopeNoteId: string; // number (30) Unique ID for a scope note record
+  subjectId: string; // number (30) ID of subject record related to contributor
+  languageCode: string; // varchar2 (15) Numeric code indicating the language of the descriptive note
+  languageName?: string; // Name of language (lookup)
+  noteText: string; // varchar2 (4000) The descriptive note text
 }
 
 export type GettySubjectMergedStatType = 'M' | 'N';
@@ -124,7 +118,7 @@ export type AatSubjectRecordType = 'C' | 'F' | 'G' | 'H';
 export interface AatSubject extends GettySubject {
   facetCode: string; // varchar2(10) - Facet code
   recordType: AatSubjectRecordType; // varchar2(15) - Subject record type (C - Concept, F - Facet, G - Guide term, H - Hierarchy name)
-  scopeNotes?: AatScopeNote[];
+  scopeNotes?: GettyScopeNote[];
 }
 
 export type UlanSubjectRecordType = 'P' | 'C';
@@ -134,7 +128,56 @@ export interface UlanSubject extends GettySubject {
   biographies?: UlanBiography[];
   nationalities?: UlanNationality[];
   roles?: UlanRole[];
-  scopeNotes?: UlanScopeNote[];
+  scopeNotes?: GettyScopeNote[];
+}
+
+/**
+ * Table: COORDINATES
+ * Description: The coordinates table holds the coordinate information for each subject
+ * record. A subject record may only have one row in the coordinates table.
+ */
+export interface TgnCoordinates {
+  elevationFeet: number; // number (0) Elevation in feet
+  elevationMeters: number; // number (0) Elevation in meters
+  location?: T.GeoLocation; // geo_point Location of the subject
+  boundingBoxLeast?: T.GeoLocation; // geo_point Least bounding box of the subject
+  boundingBoxMost?: T.GeoLocation; // geo_point Most bounding box of the subject
+  subjectId: string; // number (30) Subject record ID for coordinate information
+}
+
+/**
+ * Table: SUBJECT_RELS
+ * Description: The subject relationships table contains all preferred and non-preferred
+ * parent-child relationships in the ULAN hierarchy.
+ */
+export type TgnSubjectRelHistoricFlag = 'C' | 'H' | 'B' | 'NA' | 'U';
+export type TgnSubjectRelPreferred = 'P' | 'N';
+export type TgnSubjectRelType = 'P';
+export type TgnSubjectRelHierType = 'G' | 'I' | 'P';
+
+export interface TgnSubjectRel {
+  displayDate: string; // varchar2(200) Label for relationship date information
+  endDate: number; // number(15) Historical end date of parent/child relationship
+  historicFlag: TgnSubjectRelHistoricFlag; // char(1) Flag indicating the historical status of the parent/child relationship
+  preferred: TgnSubjectRelPreferred; // char(1) Flag indicating whether or not the parent record is preferred for a particular child
+  relType: TgnSubjectRelType; // varchar2(30) Relationship type (only parent/child currently available)
+  startDate: number; // number(15) Historical start date of parent/child relationship
+  subjectAId: string; // number(30) ID number of parent record
+  subjectBId: string; // number(30) ID number of child record
+  hierRelType: TgnSubjectRelHierType; // varchar2(15) Hierarchical relationship type
+}
+
+/**
+ * The subject table is the base table for all TGN records. A TGN record is
+ * uniquely defined by its subject ID number. The subject table stores subject-related status
+ * information and notes.
+ */
+export type TgnSubjectRecordType = 'A' | 'P' | 'B' | 'G' | 'F';
+
+export interface TgnSubject extends GettySubject {
+  recordType?: TgnSubjectRecordType; // varchar2(15) Subject record type: A – Administrative, P – Physical, B – Both, G – Guide term, F – Facet
+  scopeNotes?: GettyScopeNote[];
+  coordinates?: TgnCoordinates[];
 }
 
 export interface AggOption {
@@ -178,7 +221,7 @@ export interface ApiSearchResponseMetadata {
 
 export interface ApiSearchResponse {
   query?: SearchRequest;
-  data: (UlanSubject | AatSubject)[];
+  data: (UlanSubject | AatSubject | TgnSubject)[];
   // filters?: any; TODO
   options?: AggOptions;
   metadata?: ApiSearchResponseMetadata;
