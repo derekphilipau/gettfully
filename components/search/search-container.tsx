@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 import { SearchFilters } from './search-filters';
 import { SearchIntro } from './search-intro';
 import { SearchPagination } from './search-pagination';
-import { getUrlWithParam } from './search-params';
+import { getUrlWithParam, isParamsEmpty } from './search-params';
 
 type SearchContainerProps = {
   params: ApiSearchParams;
@@ -32,11 +32,12 @@ export function SearchContainer({
   apiError,
 }: SearchContainerProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSearchEmpty, setIsSearchEmpty] = useState<boolean>(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
 
   const router = useRouter();
   const dict = getDictionary();
+
+  const isSearchEmpty = isParamsEmpty(params);
 
   function onQueryChange(query: string) {
     router.push(getUrlWithParam(params, 'query', query));

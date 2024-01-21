@@ -92,6 +92,22 @@ export function toURLSearchParams(
   return urlParams;
 }
 
+export function isParamsEmpty(params: ApiSearchParams): boolean {
+  if (
+    params.index ||
+    params.query ||
+    params.role ||
+    params.gender ||
+    params.nationality ||
+    params.startYear ||
+    params.endYear ||
+    params.birthPlace ||
+    params.deathPlace
+  )
+    return false;
+  return true;
+}
+
 export function getUrlWithParam(
   searchParams: ApiSearchParams,
   key: string,

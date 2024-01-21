@@ -15,12 +15,13 @@ export function SearchPagination({
   totalPages,
 }: SearchPaginationProps) {
   const pageNumber = params.pageNumber || 1;
+
   const prevUrl =
     pageNumber > 1 && totalPages
       ? getUrlWithPageNumber(params, pageNumber - 1)
       : undefined;
   const nextUrl =
-    pageNumber < totalPages
+    pageNumber < totalPages && totalPages
       ? getUrlWithPageNumber(params, pageNumber + 1)
       : undefined;
 
