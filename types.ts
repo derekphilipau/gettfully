@@ -167,6 +167,12 @@ export interface TgnSubjectRel {
   hierRelType: TgnSubjectRelHierType; // varchar2(15) Hierarchical relationship type
 }
 
+export interface TgnPreferredTermRole {
+  subjectId: string;
+  term: string;
+  role: string;
+}
+
 /**
  * The subject table is the base table for all TGN records. A TGN record is
  * uniquely defined by its subject ID number. The subject table stores subject-related status
@@ -178,6 +184,7 @@ export interface TgnSubject extends GettySubject {
   recordType?: TgnSubjectRecordType; // varchar2(15) Subject record type: A – Administrative, P – Physical, B – Both, G – Guide term, F – Facet
   scopeNotes?: GettyScopeNote[];
   coordinates?: TgnCoordinates[];
+  hierarchicalPosition?: TgnPreferredTermRole[];
 }
 
 export interface AggOption {

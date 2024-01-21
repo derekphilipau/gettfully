@@ -1,3 +1,4 @@
+import fs from 'fs';
 import type {
   GettyScopeNote,
   GettySubjectMergedStatType,
@@ -6,6 +7,7 @@ import type {
   GettyTermPreferred,
   GettyTermVernacular,
   TgnCoordinates,
+  TgnPreferredTermRole,
   TgnSubject,
   TgnSubjectRecordType,
 } from '@/types';
@@ -15,6 +17,10 @@ import updateFromFile from '../util/updateFromFile';
 import { indexSettings } from './indexSettings';
 
 const INDEX_NAME = 'tgn-subjects';
+
+const CURRENT_VERSION = '0124';
+const DATA_DIR = `./data/tgn/tgn_rel_${CURRENT_VERSION}`;
+const TGN_SUBJECTS_FILE_PATH = `./data/json/tgn_subjects_${CURRENT_VERSION}.json`;
 
 export async function loadSubjectsMap(
   filePath: string
@@ -102,7 +108,6 @@ export function addCoordinatesToSubjects(
 ) {
   return processFileLineByLine(coordinatesFilePath, async (line) => {
     const fields = line.split('\t');
-    console.log(fields);
     const coordinates: Partial<TgnCoordinates> = {
       elevationFeet: parseInt(fields[0]),
       elevationMeters: parseInt(fields[1]),
@@ -164,15 +169,12 @@ export async function loadSubjectPreferredTermMap(
  * @param filePath
  * @returns
  */
-interface ParentPreferredTerm {
-  subjectId: string;
-  term: string;
-}
 export async function loadSubjectPreferredTermRelsMap(
   filePath: string,
-  subjectPreferredTermMap: Map<string, string>
-): Promise<Map<string, ParentPreferredTerm>> {
-  const subjectRelsMap = new Map<string, ParentPreferredTerm>();
+  subjectPreferredTermMap: Map<string, string>,
+  subjectPreferredPtypeRoleRelsMap: Map<string, string>
+): Promise<Map<string, TgnPreferredTermRole>> {
+  const subjectRelsMap = new Map<string, TgnPreferredTermRole>();
   await processFileLineByLine(filePath, async (line) => {
     const fields = line.split('\t');
     const isPreferred = fields[3] === 'P';
@@ -181,10 +183,12 @@ export async function loadSubjectPreferredTermRelsMap(
       const parentSubjectId = fields[6];
       const childSubjectId = fields[7];
       const parentTerm = subjectPreferredTermMap.get(parentSubjectId);
-      if (parentTerm) {
-        const parentInfo: ParentPreferredTerm = {
+      const parentRole = subjectPreferredPtypeRoleRelsMap.get(parentSubjectId);
+      if (parentTerm && parentRole) {
+        const parentInfo: TgnPreferredTermRole = {
           subjectId: parentSubjectId,
           term: parentTerm,
+          role: parentRole,
         };
         subjectRelsMap.set(childSubjectId, parentInfo);
       }
@@ -193,11 +197,93 @@ export async function loadSubjectPreferredTermRelsMap(
   return subjectRelsMap;
 }
 
+async function addHierarchicalPositionToSubjects(
+  subjectsMap: Map<string, TgnSubject>,
+  subjectPreferredTermRelsMap: Map<string, TgnPreferredTermRole>
+) {
+  // Loop through all subjects:
+  for (const subject of subjectsMap.values()) {
+    // If the subject has a parent, then add the parent to the subject
+    if (subject.parentKey) {
+      const hierarchy = buildHierarchy(
+        subject.subjectId,
+        subjectPreferredTermRelsMap
+      );
+      if (hierarchy && hierarchy.length > 0) {
+        subject.hierarchicalPosition = hierarchy;
+      }
+    }
+  }
+}
+
+/**
+ * Table: PTYPE_ROLE
+ * Description: The place type/role table is the base table for all place type/role
+ * information. In TGN, this table is used to contain place types.
+ * e.g. "agricultural land       55001", "state   81175"
+ */
+export interface TgnPTypeRole {
+  roleId: string; // number (30) Place Type/Role unique identification number
+  role: string; // varchar2(100) Place Type/Role description
+}
+export async function loadPTypeRoleMap(
+  filePath: string
+): Promise<Map<string, TgnPTypeRole>> {
+  const pTypeRoleMap = new Map<string, TgnPTypeRole>();
+
+  await processFileLineByLine(filePath, async (line) => {
+    const fields = line.split('\t');
+    const pTypeRole: TgnPTypeRole = {
+      roleId: fields[1],
+      role: fields[0],
+    };
+    pTypeRoleMap.set(pTypeRole.roleId, pTypeRole);
+  });
+
+  return pTypeRoleMap;
+}
+
+/**
+ * Table: PTYPE_ROLE_RELS
+ * Description: The place type/role relationship table contains links between the subject
+ * record and role information.
+ */
+export interface TgnPTypeRoleRel {
+  displayDate: string;
+  displayOrder: number;
+  endDate: number;
+  historicFlag: string;
+  preferred: string;
+  pTypeRoleId: string;
+  startDate: number;
+  subjectId: string;
+}
+
+export async function loadSubjectPreferredPtypeRoleRelsMap(
+  filePath: string,
+  pTypeRoleMap: Map<string, TgnPTypeRole>
+): Promise<Map<string, string>> {
+  const pTypeRoleRelsMap = new Map<string, string>();
+  await processFileLineByLine(filePath, async (line) => {
+    const fields = line.split('\t');
+    const isPreferred = fields[4] === 'P';
+    if (isPreferred) {
+      const subjectId = fields[7];
+      const pTypeRoleId = fields[5];
+      const pTypeRole = pTypeRoleMap.get(pTypeRoleId);
+      if (pTypeRole) {
+        pTypeRoleRelsMap.set(subjectId, pTypeRole.role);
+      }
+    }
+  });
+  return pTypeRoleRelsMap;
+}
+
 // Recursive function to build hierarchy
 function buildHierarchy(
   subjectID: string,
-  subjectRelsMap: Map<string, ParentPreferredTerm>
-): ParentPreferredTerm[] {
+  subjectRelsMap: Map<string, TgnPreferredTermRole>
+): TgnPreferredTermRole[] {
   const parent = subjectRelsMap.get(subjectID);
   if (parent) {
     return [parent, ...buildHierarchy(parent.subjectId, subjectRelsMap)];
@@ -206,60 +292,83 @@ function buildHierarchy(
   }
 }
 
-/*
-"HIERARCHICAL_POSITION": [
-    {
-      "LEVEL": "World",
-      "LEVEL_TYPE": "facet",
-      "SUBJECT_ID": 1001
-    },
-    {
-      "LEVEL": "South America",
-      "LEVEL_TYPE": "continent",
-      "SUBJECT_ID": 1002
-    },
-    // ... more levels (nation, state, etc.)
-  ],
-  */
-export function addHierarchicalPositionToSubjects() {}
-
 export function sortSubjectProperties(subjectsMap: Map<string, TgnSubject>) {
   for (const subject of subjectsMap.values()) {
     subject.terms?.sort((a, b) => a.displayOrder - b.displayOrder);
   }
 }
 
-export async function importTgn() {
+export async function prepareTgnData() {
   console.log('import TGN data');
-  const currentVersion = '0124';
-  const dataDir = `./data/tgn/tgn_rel_${currentVersion}`;
-  const outputFilePath = `./data/json/tgn_${currentVersion}.jsonl`;
 
-  const subjectPreferredTermMap = await loadSubjectPreferredTermMap(
-    `${dataDir}/TERM.out`
+  console.log('TGN: loading subject preferred term map...');
+  let subjectPreferredTermMap: Map<string, string> | null =
+    await loadSubjectPreferredTermMap(`${DATA_DIR}/TERM.out`);
+
+  console.log('TGN: loading ptype role map...');
+  let pTypeRoleMap: Map<string, TgnPTypeRole> | null = await loadPTypeRoleMap(
+    `${DATA_DIR}/PTYPE_ROLE.out`
   );
 
-  const subjectPreferredTermRelsMap = await loadSubjectPreferredTermRelsMap(
-    `${dataDir}/SUBJECT_RELS.out`,
-    subjectPreferredTermMap
-  );
+  console.log('TGN: loading subject ptype role rels map...');
+  const subjectPreferredPtypeRoleRelsMap =
+    await loadSubjectPreferredPtypeRoleRelsMap(
+      `${DATA_DIR}/PTYPE_ROLE_RELS.out`,
+      pTypeRoleMap
+    );
 
-  const hierarchy = buildHierarchy('8945996', subjectPreferredTermRelsMap);
-  console.log(JSON.stringify(hierarchy, null, 2));
+  pTypeRoleMap = null;
+  if (global.gc) global.gc();
 
-  return;
+  console.log('TGN: loading subject preferred term rels map...');
+  let subjectPreferredTermRelsMap: Map<string, TgnPreferredTermRole> | null =
+    await loadSubjectPreferredTermRelsMap(
+      `${DATA_DIR}/SUBJECT_RELS.out`,
+      subjectPreferredTermMap,
+      subjectPreferredPtypeRoleRelsMap
+    );
+
+  subjectPreferredTermMap = null;
+  if (global.gc) global.gc();
 
   console.log('TGN: loading subjects map...');
-  const subjectsMap = await loadSubjectsMap(`${dataDir}/SUBJECT.out`);
+  const subjectsMap = await loadSubjectsMap(`${DATA_DIR}/SUBJECT.out`);
+
+  console.log('TGN: adding hierarchical position...');
+  await addHierarchicalPositionToSubjects(
+    subjectsMap,
+    subjectPreferredTermRelsMap
+  );
+
+  fs.writeFileSync(
+    TGN_SUBJECTS_FILE_PATH,
+    JSON.stringify(Array.from(subjectsMap.entries()))
+  );
+
+  console.log('TGN: subjectMap written to file');
+}
+
+export async function importTgn() {
+  const outputFilePath = `./data/json/tgn_${CURRENT_VERSION}.jsonl`;
+
+  console.log('TGN: loading subjects map...');
+  const readData = JSON.parse(fs.readFileSync(TGN_SUBJECTS_FILE_PATH, 'utf8'));
+
+  // Convert the object back to a Map
+  const subjectsMap = new Map<string, TgnSubject>();
+  Object.entries(readData).forEach(([key, value]) => {
+    subjectsMap.set(key, value as TgnSubject);
+  });
+  console.log('TGN: subjects map loaded', subjectsMap.size);
 
   console.log('TGN: loading terms...');
-  await addTermToSubjects(`${dataDir}/TERM.out`, subjectsMap);
+  await addTermToSubjects(`${DATA_DIR}/TERM.out`, subjectsMap);
 
   console.log('TGN: loading scope notes...');
-  await addScopeNotesToSubjects(`${dataDir}/SCOPE_NOTES.out`, subjectsMap);
+  await addScopeNotesToSubjects(`${DATA_DIR}/SCOPE_NOTES.out`, subjectsMap);
 
   console.log('TGN: loading coordinates...');
-  await addCoordinatesToSubjects(`${dataDir}/COORDINATES.out`, subjectsMap);
+  await addCoordinatesToSubjects(`${DATA_DIR}/COORDINATES.out`, subjectsMap);
 
   console.log('sorting subject properties...');
   sortSubjectProperties(subjectsMap);
