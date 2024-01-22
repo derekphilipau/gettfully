@@ -43,6 +43,7 @@ export function getSanitizedSearchParams(
   sanitizedParams.endYear = getIntParam(params, 'endYear');
   sanitizedParams.birthPlace = getStringParam(params, 'birthPlace');
   sanitizedParams.deathPlace = getStringParam(params, 'deathPlace');
+  sanitizedParams.showFilters = params.showFilters === 'true';
 
   return sanitizedParams as ApiSearchParams;
 }
@@ -87,7 +88,7 @@ export function toURLSearchParams(
     urlParams.set('birthPlace', searchParams.birthPlace);
   if (searchParams.deathPlace)
     urlParams.set('deathPlace', searchParams.deathPlace);
-  if (searchParams.isShowFilters === true) urlParams.set('f', 'true');
+  if (searchParams.showFilters === true) urlParams.set('showFilters', 'true');
 
   return urlParams;
 }
@@ -111,7 +112,7 @@ export function isParamsEmpty(params: ApiSearchParams): boolean {
 export function getUrlWithParam(
   searchParams: ApiSearchParams,
   key: string,
-  value: string | number | undefined
+  value: string | number | boolean | undefined
 ): string {
   const params = { ...searchParams };
   params[key] = value;

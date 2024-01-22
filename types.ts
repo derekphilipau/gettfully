@@ -167,6 +167,7 @@ export interface ApiSearchParams {
   pageNumber?: number;
   isMinimal?: string;
   size?: number;
+  showFilters?: boolean;
   [key: string]: any;
 }
 
