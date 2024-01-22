@@ -76,7 +76,7 @@ export function SearchForm({ params, totalPages }: SearchFormProps) {
           <SlidersHorizontalIcon className="size-5" />
         </Button>
         <RadioGroup
-          defaultValue={params.index || ''}
+          value={params.index || ''}
           onValueChange={onIndexChange}
           className="flex flex-wrap items-center"
         >
