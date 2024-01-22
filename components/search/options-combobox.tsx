@@ -39,6 +39,10 @@ export function OptionsCombobox({
     [onChange]
   );
 
+  React.useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
   let displayName = title;
   if (selected) {
     displayName = selected;

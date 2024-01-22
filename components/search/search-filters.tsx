@@ -85,7 +85,7 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
         />
       </div>
       <RadioGroup
-        defaultValue={params.gender || ''}
+        value={params.gender || ''}
         onValueChange={onGenderChange}
         className="flex h-10 flex-wrap items-center"
       >

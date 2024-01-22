@@ -115,7 +115,11 @@ export function getUrlWithParam(
   value: string | number | boolean | undefined
 ): string {
   const params = { ...searchParams };
-  params[key] = value;
+  if (value === undefined) {
+    delete params[key];
+  } else {
+    params[key] = value;
+  }
   params.pageNumber = 1;
   return `/?${toURLSearchParams(params)}`;
 }
