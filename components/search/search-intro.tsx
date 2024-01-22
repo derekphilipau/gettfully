@@ -25,17 +25,67 @@ export function SearchIntro() {
         </h3>
         <ul className="ml-4 list-disc">
           <li>
-            <em>Simple Search:</em> Enter a term like &quot;picasso&quot;,
-            &quot;pottery&quot;, etc.
+            <em>Simple Search:</em> Enter a term like{' '}
+            <Link
+              href={{
+                pathname: '/',
+                query: { query: 'picasso' },
+              }}
+            >
+              &quot;picasso&quot;
+            </Link>
+            ,{' '}
+            <Link
+              href={{
+                pathname: '/',
+                query: { query: 'pottery' },
+              }}
+            >
+              &quot;pottery&quot;
+            </Link>
+            , etc.
           </li>
           <li>
-            <em>Subject ID:</em> Enter an ID like &quot;500009666&quot;.
-            Searching for &quot;500009&quot; finds all IDs starting with
-            &quot;500009&quot;
+            <em>Subject ID:</em> Enter an ID like{' '}
+            <Link
+              href={{
+                pathname: '/',
+                query: { query: '500009666' },
+              }}
+            >
+              &quot;500009666&quot;
+            </Link>
+            . Searching for
+            <Link
+              href={{
+                pathname: '/',
+                query: { query: '500009' },
+              }}
+            >
+              &quot;500009&quot;
+            </Link>{' '}
+            finds all IDs starting with &quot;500009&quot;
           </li>
           <li>
-            Check &quot;ULAN&quot; or &quot;AAT&quot; to limit search to
-            specific vocabulary.
+            Check{' '}
+            <Link
+              href={{
+                pathname: '/',
+                query: { index: 'ulan' },
+              }}
+            >
+              &quot;ULAN&quot;
+            </Link>{' '}
+            or{' '}
+            <Link
+              href={{
+                pathname: '/',
+                query: { index: 'aat' },
+              }}
+            >
+              &quot;AAT&quot;
+            </Link>{' '}
+            to limit search to specific vocabulary.
           </li>
           <li>Click the filter icon to refine search.</li>
         </ul>
