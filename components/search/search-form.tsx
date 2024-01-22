@@ -1,17 +1,18 @@
 'use client';
 
+import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ApiSearchParams } from '@/types';
-import { SlidersHorizontalIcon } from 'lucide-react';
+import { SearchIcon, SlidersHorizontalIcon } from 'lucide-react';
 
-import { DebouncedInput } from '@/components/debounced-input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '../ui/button';
+import { Input } from '../ui/input';
 import { SearchFilterTags } from './search-filter-tags';
 import { SearchFilters } from './search-filters';
 import { SearchPagination } from './search-pagination';
-import { getUrlWithParam, isParamsEmpty } from './search-params';
+import { getUrlWithParam } from './search-params';
 
 type SearchFormProps = {
   params: ApiSearchParams;
@@ -20,9 +21,11 @@ type SearchFormProps = {
 
 export function SearchForm({ params, totalPages }: SearchFormProps) {
   const router = useRouter();
+  const [myQuery, setMyQuery] = useState(params.query || '');
 
-  function onQueryChange(query: string) {
-    router.push(getUrlWithParam(params, 'query', query));
+  function handleQuerySubmit(event: FormEvent) {
+    event.preventDefault();
+    router.push(getUrlWithParam(params, 'query', myQuery));
   }
 
   function onIndexChange(index: string) {
@@ -33,13 +36,36 @@ export function SearchForm({ params, totalPages }: SearchFormProps) {
     router.push(getUrlWithParam(params, 'showFilters', value));
   }
 
+  useEffect(() => {
+    setMyQuery(params.query || '');
+  }, [params.query]);
+
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:justify-normal">
-        <DebouncedInput
-          onSearchAsYouTypeChange={onQueryChange}
-          value={params.query}
-        />
+        <form className="grow" onSubmit={handleQuerySubmit}>
+          <div className="flex rounded-md">
+            <div className="relative flex grow items-stretch focus-within:z-10">
+              <Input
+                type="search"
+                className="rounded-none rounded-l-md text-lg"
+                name="query"
+                placeholder="Search..."
+                value={myQuery}
+                onChange={(e) => setMyQuery(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
+            <Button
+              type="submit"
+              variant="secondary"
+              className="rounded-none rounded-r-md border border-l-0"
+              aria-label="Search"
+            >
+              <SearchIcon className="size-5" />
+            </Button>
+          </div>
+        </form>
         <Button
           variant="ghost"
           size="icon"

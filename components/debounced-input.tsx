@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { getDictionary } from '@/dictionaries/dictionaries';
 import { Loader2Icon } from 'lucide-react';
 
@@ -10,27 +10,33 @@ import { Input } from '@/components/ui/input';
 interface DebouncedInputProps {
   onSearchAsYouTypeChange: (searchQuery: string) => void;
   debounceTime?: number;
-  isLoading?: boolean;
   value?: string;
 }
 
 export function DebouncedInput({
   onSearchAsYouTypeChange,
-  debounceTime = 400,
-  isLoading = false,
+  debounceTime = 500,
   value = '',
 }: DebouncedInputProps) {
   const dict = getDictionary();
-  const [myValue, setValue] = useState(value);
+  const [myValue, setMyValue] = useState(value);
+  const [isLoading, setIsLoading] = useState(false);
 
   const debouncedSuggest = useDebounce(() => {
+    setIsLoading(true);
     onSearchAsYouTypeChange(myValue);
   }, debounceTime);
 
   const onQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    setMyValue(e.target.value);
     debouncedSuggest();
   };
+
+  /* TODO: This is very problematic.. difficult when debouncing while typing. */
+  useEffect(() => {
+    setMyValue(value);
+    setIsLoading(false);
+  }, [value]);
 
   return (
     <div className="relative flex grow items-stretch focus-within:z-10">
