@@ -27,7 +27,12 @@ export function UlanSubjectDetails({
                   nationality.preferred === 'P' ? 'font-bold' : ''
                 )}
               >
-                <Link href={`/?index=ulan&nationality=${nationality.name}`}>
+                <Link
+                  href={{
+                    pathname: '/',
+                    query: { nationality: nationality.name },
+                  }}
+                >
                   {nationality.name} <PreferredBadge term={nationality} />
                 </Link>
               </li>
@@ -49,7 +54,12 @@ export function UlanSubjectDetails({
                   role.preferred === 'P' ? 'font-bold' : ''
                 )}
               >
-                <Link href={`/?index=ulan&role=${role.name}`}>
+                <Link
+                  href={{
+                    pathname: '/',
+                    query: { role: role.name },
+                  }}
+                >
                   {role.name} <PreferredBadge term={role} />
                 </Link>
               </li>
