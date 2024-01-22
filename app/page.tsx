@@ -1,4 +1,3 @@
-import { getDictionary } from '@/dictionaries/dictionaries';
 import type {
   AatSubject,
   ApiSearchResponse,

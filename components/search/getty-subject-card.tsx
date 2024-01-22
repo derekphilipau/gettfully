@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import type { AatSubject, UlanSubject } from '@/types';
 import { ChevronsUpDownIcon } from 'lucide-react';
