@@ -8,6 +8,7 @@ import { DebouncedInput } from '@/components/debounced-input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Button } from '../ui/button';
+import { SearchFilterTags } from './search-filter-tags';
 import { SearchFilters } from './search-filters';
 import { SearchPagination } from './search-pagination';
 import { getUrlWithParam, isParamsEmpty } from './search-params';
@@ -70,6 +71,11 @@ export function SearchForm({ params, totalPages }: SearchFormProps) {
       </div>
       <div className={`mt-2 sm:mt-0 ${params.showFilters ? '' : 'hidden'}`}>
         <SearchFilters params={params} />
+      </div>
+      <div
+        className={`flex flex-wrap gap-2 ${params.showFilters ? 'hidden' : ''}`}
+      >
+        <SearchFilterTags params={params} />
       </div>
     </div>
   );
