@@ -90,16 +90,16 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
         className="flex h-10 flex-wrap items-center"
       >
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="" id="r1" />
-          <Label htmlFor="r1">All Genders</Label>
+          <RadioGroupItem value="" id="gender1" />
+          <Label htmlFor="gender1">All Genders</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="M" id="r2" />
-          <Label htmlFor="r2">Male</Label>
+          <RadioGroupItem value="M" id="gender2" />
+          <Label htmlFor="gender2">Male</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="F" id="r3" />
-          <Label htmlFor="r3">Female</Label>
+          <RadioGroupItem value="F" id="gender3" />
+          <Label htmlFor="gender3">Female</Label>
         </div>
       </RadioGroup>
     </div>

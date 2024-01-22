@@ -81,16 +81,16 @@ export function SearchForm({ params, totalPages }: SearchFormProps) {
           className="flex flex-wrap items-center"
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="" id="r1" />
-            <Label htmlFor="r1">All</Label>
+            <RadioGroupItem value="" id="index1" />
+            <Label htmlFor="index1">All</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="ulan" id="r2" />
-            <Label htmlFor="r2">ULAN</Label>
+            <RadioGroupItem value="ulan" id="index2" />
+            <Label htmlFor="index2">ULAN</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="aat" id="r3" />
-            <Label htmlFor="r3">AAT</Label>
+            <RadioGroupItem value="aat" id="index3" />
+            <Label htmlFor="index3">AAT</Label>
           </div>
         </RadioGroup>
         <SearchPagination params={params} totalPages={totalPages} />
