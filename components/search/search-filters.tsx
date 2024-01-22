@@ -43,21 +43,25 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
   return (
     <div className="flex flex-wrap gap-2">
       <OptionsCombobox
+        value={params.role}
         title="Role"
         field="roles.name"
         onChange={onRoleChange}
       />
       <OptionsCombobox
+        value={params.nationality}
         title="Nationality"
         field="nationalities.name"
         onChange={onNationalityChange}
       />
       <OptionsCombobox
+        value={params.birthPlace}
         title="Birthplace"
         field="biographies.birthPlaceName"
         onChange={onBirthPlaceChange}
       />
       <OptionsCombobox
+        value={params.deathPlace}
         title="Deathplace"
         field="biographies.deathPlaceName"
         onChange={onDeathPlaceChange}

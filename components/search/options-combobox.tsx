@@ -15,16 +15,20 @@ import { ComboboxSearch } from './combobox-search';
 const POPOVER_WIDTH = 'w-full sm:w-[220px]';
 
 export function OptionsCombobox({
+  value,
   title,
   field,
   onChange,
 }: {
+  value: string | undefined;
   title: string;
   field: string;
   onChange: (value: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<string | undefined>();
+  const [selected, setSelected] = React.useState<string | undefined>(
+    value || undefined
+  );
 
   const handleSetActive = React.useCallback(
     (value: string) => {

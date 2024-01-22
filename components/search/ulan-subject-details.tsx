@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { UlanSubject } from '@/types';
 
 import { cn } from '@/lib/utils';
@@ -26,7 +27,9 @@ export function UlanSubjectDetails({
                   nationality.preferred === 'P' ? 'font-bold' : ''
                 )}
               >
-                {nationality.name} <PreferredBadge term={nationality} />
+                <Link href={`/?index=ulan&nationality=${nationality.name}`}>
+                  {nationality.name} <PreferredBadge term={nationality} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -46,7 +49,9 @@ export function UlanSubjectDetails({
                   role.preferred === 'P' ? 'font-bold' : ''
                 )}
               >
-                {role.name} <PreferredBadge term={role} />
+                <Link href={`/?index=ulan&role=${role.name}`}>
+                  {role.name} <PreferredBadge term={role} />
+                </Link>
               </li>
             ))}
           </ul>
