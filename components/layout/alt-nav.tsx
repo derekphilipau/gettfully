@@ -1,12 +1,15 @@
 import Link from 'next/link';
-import { GithubIcon, InstagramIcon } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 import { siteConfig } from '@/config/site';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
+import { Logo } from '../logo';
 import { LogoGetty } from '../logo_getty';
 
 export function AltNav() {
+  const linkClass =
+    'text-neutral-700 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100';
   return (
     <>
       <Link
@@ -18,10 +21,10 @@ export function AltNav() {
           className={buttonVariants({
             size: 'sm',
             variant: 'ghost',
-            className: 'text-neutral-700 dark:text-neutral-400',
+            className: linkClass,
           })}
         >
-          <LogoGetty className="size-5" />
+          <LogoGetty className="size-6" />
           <span className="sr-only">Getty</span>
         </div>
       </Link>
@@ -31,32 +34,26 @@ export function AltNav() {
             className={buttonVariants({
               size: 'sm',
               variant: 'ghost',
-              className: 'text-neutral-700 dark:text-neutral-400',
+              className: linkClass,
             })}
           >
-            <GithubIcon className="size-5" />
+            <Github className="size-6" />
             <span className="sr-only">Github</span>
           </div>
         </Link>
       )}
-      {siteConfig?.links?.instagram && (
-        <Link
-          href={siteConfig.links.instagram}
-          target="_blank"
-          rel="noreferrer"
+      <Link href="https://musefully.org" target="_blank" rel="noreferrer">
+        <div
+          className={buttonVariants({
+            size: 'sm',
+            variant: 'ghost',
+            className: linkClass,
+          })}
         >
-          <div
-            className={buttonVariants({
-              size: 'sm',
-              variant: 'ghost',
-              className: 'text-neutral-700 dark:text-neutral-400',
-            })}
-          >
-            <InstagramIcon className="size-5" />
-            <span className="sr-only">Instagram</span>
-          </div>
-        </Link>
-      )}
+          <Logo className="size-6" />
+          <span className="sr-only">Musefully</span>
+        </div>
+      </Link>
       <ThemeToggle />
     </>
   );

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getDictionary } from '@/dictionaries/dictionaries';
 
 import { cn } from '@/lib/utils';
-import { Input } from '../ui/input';
+import { GettfullyLogo } from '../gettfully-logo';
 
 interface FooterProps {
   items?: any[];
@@ -19,13 +19,7 @@ export function Footer({ items }: FooterProps) {
             href="/"
             className="mb-2 flex items-center space-x-2 text-xl font-bold"
           >
-            <span className="inline-block">
-              <span className="text-foreground">Gett</span>
-              <span className="text-neutral-500 dark:text-neutral-400">
-                full
-              </span>
-              <span className="text-foreground">y</span>
-            </span>
+            <GettfullyLogo />
           </Link>
           {}
           <p className="text-xs">{dict['footer.text']}</p>
