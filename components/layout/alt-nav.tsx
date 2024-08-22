@@ -42,11 +42,7 @@ export function AltNav() {
           </div>
         </Link>
       )}
-      <Link
-        href="https://www.getty.edu/research/tools/vocabularies/"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <Link href="https://musefully.org" target="_blank" rel="noreferrer">
         <div
           className={buttonVariants({
             size: 'sm',
