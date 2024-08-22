@@ -1,59 +1,40 @@
-import Link from 'next/link';
 import { Github } from 'lucide-react';
 
 import { siteConfig } from '@/config/site';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
-import { buttonVariants } from '@/components/ui/button';
 import { Logo } from '../logo';
 import { LogoGetty } from '../logo_getty';
+import { TooltipButton } from './tooltip-button';
 
 export function AltNav() {
   const linkClass =
     'text-neutral-700 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100';
+
   return (
     <>
-      <Link
+      <TooltipButton
         href="https://www.getty.edu/research/tools/vocabularies/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <div
-          className={buttonVariants({
-            size: 'sm',
-            variant: 'ghost',
-            className: linkClass,
-          })}
-        >
-          <LogoGetty className="size-6" />
-          <span className="sr-only">Getty</span>
-        </div>
-      </Link>
+        icon={LogoGetty}
+        label="Getty"
+        tooltip="Getty Vocabularies"
+        className={linkClass}
+      />
       {siteConfig?.links?.github && (
-        <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
-          <div
-            className={buttonVariants({
-              size: 'sm',
-              variant: 'ghost',
-              className: linkClass,
-            })}
-          >
-            <Github className="size-6" />
-            <span className="sr-only">Github</span>
-          </div>
-        </Link>
+        <TooltipButton
+          href={siteConfig.links.github}
+          icon={Github}
+          label="Github"
+          tooltip="View source code on GitHub"
+          className={linkClass}
+        />
       )}
-      <Link href="https://musefully.org" target="_blank" rel="noreferrer">
-        <div
-          className={buttonVariants({
-            size: 'sm',
-            variant: 'ghost',
-            className: linkClass,
-          })}
-        >
-          <Logo className="size-6" />
-          <span className="sr-only">Musefully</span>
-        </div>
-      </Link>
+      <TooltipButton
+        href="https://musefully.org"
+        icon={Logo}
+        label="Musefully"
+        tooltip="Musefully"
+        className={linkClass}
+      />
       <ThemeToggle />
     </>
   );

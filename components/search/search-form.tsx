@@ -7,6 +7,12 @@ import { SearchIcon, SlidersHorizontalIcon } from 'lucide-react';
 
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { SearchFilterTags } from './search-filter-tags';
@@ -66,15 +72,24 @@ export function SearchForm({ params, totalPages }: SearchFormProps) {
             </Button>
           </div>
         </form>
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Show Filters"
-          className="size-10"
-          onClick={() => setShowFilters(!params.showFilters)}
-        >
-          <SlidersHorizontalIcon className="size-5" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Show Filters"
+                className="size-10"
+                onClick={() => setShowFilters(!params.showFilters)}
+              >
+                <SlidersHorizontalIcon className="size-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Search Filters</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <RadioGroup
           value={params.index || ''}
           onValueChange={onIndexChange}
