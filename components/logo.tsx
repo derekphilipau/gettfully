@@ -3,6 +3,7 @@ export const Logo = ({ className }) => (
     className={className}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 48 48"
+    fill="currentColor"
   >
     <polygon points="24 1 3.93 13 43.93 13 24 1" />
     <rect x="7" y="41" width="34" height="2" />

@@ -26,7 +26,7 @@ export function SearchPagination({
       : undefined;
 
   return (
-    <div className="flex items-center justify-end gap-x-2">
+    <div className="flex items-center justify-end gap-x-1">
       {prevUrl ? (
         <Link
           className={buttonVariants({ variant: 'outline' })}
