@@ -7,6 +7,7 @@ import { SearchForm } from './search-form';
 import { SearchIntro } from './search-intro';
 import { SearchPagination } from './search-pagination';
 import { isParamsEmpty } from './search-params';
+import { SearchSummary } from './search-summary';
 
 type SearchContainerProps = {
   params: ApiSearchParams;
@@ -30,13 +31,14 @@ export function SearchContainer({
   return (
     <section className="">
       <SearchForm params={params} totalPages={totalPages} />
+      <SearchSummary params={params} count={count} totalPages={totalPages} />
       {isSearchEmpty ? (
         <div className="my-6 flex w-full justify-center">
           <SearchIntro />
         </div>
       ) : (
         <>
-          <div className="mt-4 flex flex-col flex-wrap gap-1 sm:gap-2">
+          <div className="mt-2 flex flex-col flex-wrap gap-1 sm:gap-2">
             {items?.length > 0 &&
               items.map(
                 (item: AatSubject | UlanSubject, i: Key) =>
@@ -53,7 +55,12 @@ export function SearchContainer({
               </h3>
             )}
           </div>
-          <div className="mt-4 flex w-full justify-end">
+          <div className="mt-4 flex flex-wrap w-full justify-between items-center">
+            <SearchSummary
+              params={params}
+              count={count}
+              totalPages={totalPages}
+            />
             <SearchPagination params={params} totalPages={totalPages} />
           </div>
         </>

@@ -11,7 +11,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { GettySubjectDetails } from './getty-subject-details';
-import { UlanSubjectHeader } from './ulan-subject-header';
+import { GettySubjectHeader } from './getty-subject-header';
 
 export function GettySubjectCard({
   gettySubject,
@@ -34,7 +34,7 @@ export function GettySubjectCard({
               <span className="sr-only">Expand Subject</span>
             </Button>
           </CollapsibleTrigger>
-          <UlanSubjectHeader ulanSubject={gettySubject} />
+          <GettySubjectHeader gettySubject={gettySubject} />
         </div>
         <CollapsibleContent className="border-t pt-3">
           <GettySubjectDetails gettySubject={gettySubject} />
