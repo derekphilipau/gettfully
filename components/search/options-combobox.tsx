@@ -1,87 +1,67 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDownIcon, XIcon } from 'lucide-react';
+import type { AggOption } from '@/types'; // Import AggOption type
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { ComboboxSearch } from './combobox-search';
+import { AsyncSelect } from '@/components/ui-custom/async-select';
+import { Badge } from '@/components/ui/badge';
 
 const POPOVER_WIDTH = 'w-full sm:w-[220px]';
+
+async function fetchOptions(
+  field: string,
+  query?: string
+): Promise<AggOption[]> {
+  const res = await fetch(
+    `/api/search/options?field=${field}${query ? `&query=${query}` : ''}`
+  );
+  if (!res.ok) {
+    throw new Error('Failed to fetch options');
+  }
+  const data = await res.json();
+  return data?.data || [];
+}
+
+const getOptionValueAction = (option: AggOption) => option.key;
+const getDisplayValueAction = (option: AggOption) => option.key;
+const renderOptionAction = (option: AggOption) => (
+  <div className="flex w-full items-center justify-between">
+    <span className="text-wrap">{option.key}</span>
+    <Badge variant="secondary">{option.doc_count}</Badge>
+  </div>
+);
 
 export function OptionsCombobox({
   value,
   title,
   field,
-  onChange,
+  onChangeAction,
 }: {
   value: string | undefined;
   title: string;
   field: string;
-  onChange: (value: string) => void;
+  onChangeAction: (value: string) => void;
 }) {
-  const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<string | undefined>(
-    value || undefined
+  const boundFetcher = React.useCallback(
+    (query?: string) => fetchOptions(field, query),
+    [field]
   );
-
-  const handleSetActive = React.useCallback(
-    (value: string) => {
-      setSelected(value);
-      onChange(value);
-      setOpen(false);
-    },
-    [onChange]
-  );
-
-  React.useEffect(() => {
-    setSelected(value);
-  }, [value]);
-
-  let displayName = title;
-  if (selected) {
-    displayName = selected;
-  }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          className={cn('justify-between', POPOVER_WIDTH)}
-        >
-          <div className="overflow-hidden text-ellipsis">{displayName}</div>
-
-          <div className="flex gap-x-1">
-            {selected && (
-              <XIcon
-                className="ml-1 size-4 shrink-0"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setSelected(undefined);
-                  onChange('');
-                }}
-              />
-            )}
-            <ChevronsUpDownIcon className="ml-1 size-4 shrink-0 opacity-50" />
-          </div>
-        </Button>
-      </PopoverTrigger>
-
-      <PopoverContent side="bottom" className={cn('p-0', POPOVER_WIDTH)}>
-        <ComboboxSearch
-          title={title}
-          field={field}
-          selectedResult={selected}
-          onSelectResult={handleSetActive}
-        />
-      </PopoverContent>
-    </Popover>
+    <AsyncSelect<AggOption>
+      fetcherAction={boundFetcher}
+      getOptionValueAction={getOptionValueAction}
+      getDisplayValueAction={getDisplayValueAction}
+      renderOptionAction={renderOptionAction}
+      value={value || ''}
+      onChangeAction={onChangeAction}
+      label={title}
+      placeholder={title}
+      clearable={true}
+      triggerClassName={POPOVER_WIDTH}
+      width={POPOVER_WIDTH.replace('w-', '')}
+      noResultsMessage={`No ${title.toLowerCase()} found.`}
+      preload={false}
+    />
   );
 }

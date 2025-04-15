@@ -29,16 +29,18 @@ export async function writeJsonLFile(
 ): Promise<void> {
   const outputStream = fs.createWriteStream(outputFilePath);
 
-  return new Promise(async (resolve, reject) => {
-    outputStream.on('error', reject);
+  return new Promise<void>(async (resolve, reject) => {
+    outputStream.on('error', (err) => reject(err));
 
     for (const obj of dataMap.values()) {
       if (!outputStream.write(JSON.stringify(obj) + '\n')) {
-        await new Promise((resolve) => outputStream.once('drain', resolve));
+        await new Promise<void>((resolveDrain) =>
+          outputStream.once('drain', () => resolveDrain())
+        );
       }
     }
 
     outputStream.end();
-    outputStream.on('finish', resolve);
+    outputStream.on('finish', () => resolve());
   });
 }

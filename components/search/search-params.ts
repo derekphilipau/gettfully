@@ -3,6 +3,7 @@
  */
 
 // Don't allow more than 1000 pages of results
+import type { Metadata } from 'next';
 import type { ApiSearchParams } from '@/types';
 
 export const MAX_SEARCH_PAGE_SIZE = 100;
@@ -198,4 +199,72 @@ export function getIntParam(
     typeof params[key] === 'string'
     ? parseInt(params[key] as string, 10)
     : undefined;
+}
+
+/**
+ * Generate metadata for the search page based on search parameters
+ *
+ * @param params - The sanitized search parameters
+ * @returns Metadata object for the page
+ */
+export function generateSearchMetadata(params: ApiSearchParams): Metadata {
+  // Default metadata
+  const metadata: Metadata = {
+    title: 'Search | gettfully',
+    description: 'Search the Getty vocabulary databases',
+  };
+
+  // If search is empty, return default metadata
+  if (isParamsEmpty(params)) {
+    return metadata;
+  }
+
+  // Construct a descriptive title based on search parameters
+  let title = 'Search';
+  let description = 'Results for';
+
+  // Add index information (ULAN or AAT)
+  if (params.index) {
+    const indexType = params.index === 'ulan' ? 'ULAN' : 'AAT';
+    title = `${indexType} ${title}`;
+    description += ` ${indexType}`;
+  }
+
+  // Add query term if present
+  if (params.query) {
+    title = `${params.query} - ${title}`;
+    description += ` "${params.query}"`;
+  }
+
+  // Add filters information to description
+  if (params.role) {
+    description += `, role: ${params.role}`;
+  }
+  if (params.gender) {
+    description += `, gender: ${params.gender}`;
+  }
+  if (params.nationality) {
+    description += `, nationality: ${params.nationality}`;
+  }
+  if (params.birthPlace) {
+    description += `, birth place: ${params.birthPlace}`;
+  }
+  if (params.deathPlace) {
+    description += `, death place: ${params.deathPlace}`;
+  }
+  if (params.startYear && params.endYear) {
+    description += `, years: ${params.startYear}-${params.endYear}`;
+  } else if (params.startYear) {
+    description += `, from year: ${params.startYear}`;
+  } else if (params.endYear) {
+    description += `, until year: ${params.endYear}`;
+  }
+
+  // Add pagination info if not on first page
+  if (params.pageNumber && params.pageNumber > 1) {
+    title = `${title} (Page ${params.pageNumber})`;
+    description += ` - Page ${params.pageNumber}`;
+  }
+
+  return { title, description, openGraph: { title, description } };
 }

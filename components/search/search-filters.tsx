@@ -46,25 +46,25 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
         value={params.role}
         title="Role"
         field="roles.name"
-        onChange={onRoleChange}
+        onChangeAction={onRoleChange}
       />
       <OptionsCombobox
         value={params.nationality}
         title="Nationality"
         field="nationalities.name"
-        onChange={onNationalityChange}
+        onChangeAction={onNationalityChange}
       />
       <OptionsCombobox
         value={params.birthPlace}
         title="Birthplace"
         field="biographies.birthPlaceName"
-        onChange={onBirthPlaceChange}
+        onChangeAction={onBirthPlaceChange}
       />
       <OptionsCombobox
         value={params.deathPlace}
         title="Deathplace"
         field="biographies.deathPlaceName"
-        onChange={onDeathPlaceChange}
+        onChangeAction={onDeathPlaceChange}
       />
       <div className="">
         <Input

@@ -33,8 +33,9 @@ export function UlanSubjectDetails({
                     query: { nationality: nationality.name },
                   }}
                 >
-                  {nationality.name} <PreferredBadge term={nationality} />
-                </Link>
+                  {nationality.name}
+                </Link>{' '}
+                <PreferredBadge term={nationality} /> {/* Moved outside Link */}
               </li>
             ))}
           </ul>
@@ -54,14 +55,10 @@ export function UlanSubjectDetails({
                   role.preferred === 'P' ? 'font-bold' : ''
                 )}
               >
-                <Link
-                  href={{
-                    pathname: '/',
-                    query: { role: role.name },
-                  }}
-                >
-                  {role.name} <PreferredBadge term={role} />
-                </Link>
+                <Link href={{ pathname: '/', query: { role: role.name } }}>
+                  {role.name}
+                </Link>{' '}
+                <PreferredBadge term={role} /> {/* Moved outside Link */}
               </li>
             ))}
           </ul>

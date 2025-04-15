@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import type {
   AatSubject,
   ApiSearchResponse,
@@ -8,16 +9,26 @@ import type {
 import { search } from '@/lib/elasticsearch/api/search';
 import { SearchContainer } from '@/components/search/search-container';
 import {
+  generateSearchMetadata,
   getSanitizedSearchParams,
   isParamsEmpty,
 } from '@/components/search/search-params';
 
-type Props = {
-  params: { index: string };
-  searchParams: GenericSearchParams;
+export type Props = {
+  params: Promise<{ index: string }>;
+  searchParams: Promise<GenericSearchParams>;
 };
 
-export default async function Page({ params, searchParams }: Props) {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const searchParams = await props.searchParams;
+  const sanitizedParams = getSanitizedSearchParams(searchParams);
+  return generateSearchMetadata(sanitizedParams);
+}
+
+export default async function Page(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const sanitizedParams = getSanitizedSearchParams(searchParams);
 
   let items: (UlanSubject | AatSubject)[] = [];
