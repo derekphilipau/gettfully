@@ -1,9 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ApiSearchParams } from '@/types';
+import { XIcon } from 'lucide-react';
 
 import { DebouncedInput } from '@/components/ui-custom/debounced-input';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
@@ -102,6 +105,12 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
           <Label htmlFor="gender3">Female</Label>
         </div>
       </RadioGroup>
+      <Button variant="outline" asChild>
+        <Link href="/" className="flex items-center gap-1">
+          <XIcon className="size-4" />
+          <span>Clear Filters</span>
+        </Link>
+      </Button>
     </div>
   );
 }
