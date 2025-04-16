@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import type { ApiSearchParams } from '@/types';
 
-import { Input } from '@/components/ui/input';
+import { DebouncedInput } from '@/components/ui-custom/debounced-input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { OptionsCombobox } from './options-combobox';
@@ -29,11 +29,11 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
   }
 
   function onStartYearChange(value: string) {
-    router.push(getUrlWithParam(params, 'startYear', value));
+    router.push(getUrlWithParam(params, 'startYear', value || undefined));
   }
 
   function onEndYearChange(value: string) {
-    router.push(getUrlWithParam(params, 'endYear', value));
+    router.push(getUrlWithParam(params, 'endYear', value || undefined));
   }
 
   function onGenderChange(value: string) {
@@ -67,21 +67,21 @@ export function SearchFilters({ params }: { params: ApiSearchParams }) {
         onChangeAction={onDeathPlaceChange}
       />
       <div className="">
-        <Input
+        <DebouncedInput
           id="startYear"
           placeholder="Born After"
           className="w-28"
           value={params.startYear}
-          onChange={(e) => onStartYearChange(e.target.value)}
+          onChange={onStartYearChange}
         />
       </div>
       <div className="">
-        <Input
+        <DebouncedInput
           id="endYear"
           placeholder="Died Before"
           className="w-28"
           value={params.endYear}
-          onChange={(e) => onEndYearChange(e.target.value)}
+          onChange={onEndYearChange}
         />
       </div>
       <RadioGroup
